@@ -12,10 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.nutikorv.andreas.nutikorvalpha.Adapters.NavigationDrawerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,11 @@ public class FragmentDrawer extends Fragment {
             data.add(navItem);
         }
         return data;
+    }
+
+    public void open()
+    {
+        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
     @Override
