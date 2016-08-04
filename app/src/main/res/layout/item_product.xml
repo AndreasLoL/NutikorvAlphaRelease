@@ -45,7 +45,9 @@
             <TextView
                 android:id="@+id/selverPrice"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
+                android:maxHeight="25dp"
+                android:minHeight="25dp"
                 android:background="#e74c3c"
                 android:padding="4dp"
                 android:maxWidth="80dp"
@@ -53,7 +55,7 @@
                 android:gravity="center"
                 android:layout_gravity="bottom"
                 android:textColor="#fff"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:ellipsize="end"
                 android:text="Selver: $0.55" />
 
@@ -62,19 +64,23 @@
                 android:layout_width="80dp"
                 android:maxWidth="80dp"
                 android:minWidth="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
+                android:maxHeight="25dp"
+                android:minHeight="25dp"
                 android:background="#e74c3c"
                 android:padding="4dp"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal|bottom"
                 android:textColor="#fff"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/maximaPrice"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
+                android:maxHeight="25dp"
+                android:minHeight="25dp"
                 android:background="#e74c3c"
                 android:padding="4dp"
                 android:maxWidth="80dp"
@@ -82,7 +88,7 @@
                 android:gravity="center"
                 android:layout_gravity="right|bottom"
                 android:textColor="#fff"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:ellipsize="end" />
 
             <EditText

@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.innodroid.expandablerecycler.ExpandableRecyclerAdapter;
@@ -30,6 +31,7 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableRecyclerViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ProductListAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.SubCategoryExpandableRecyclerAdapter;
 import com.nutikorv.andreas.nutikorvalpha.MainActivity;
 import com.nutikorv.andreas.nutikorvalpha.Objects.AsyncResult;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
@@ -37,6 +39,9 @@ import com.nutikorv.andreas.nutikorvalpha.Objects.MainCategory;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Objects.ProductsFromURL;
 import com.nutikorv.andreas.nutikorvalpha.Objects.ReadProducts;
+import com.nutikorv.andreas.nutikorvalpha.Objects.SubCategory;
+import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryChildListItem;
+import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
@@ -44,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,15 +97,47 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
 
         if (GlobalParameters.r != null) {
-            final HashMap<String, List<Product>> t = new HashMap<>();
+//            final HashMap<String, List<Product>> t = new HashMap<>();
+//            List<SubcategoryParentListItem> subcategoryParentListItems = new ArrayList<>();
+//            for (int i = 0; i < 5; i++) {
+//                SubcategoryParentListItem eachParentItem = new SubcategoryParentListItem();
+//                subcategoryParentListItems.add(eachParentItem);
+//            }
+//
+//            List<ParentListItem> parentListItems = new ArrayList<>();
+//            for (SubcategoryParentListItem subcategoryParentListItem : subcategoryParentListItems) {
+//                List<SubcategoryChildListItem> childItemList = new ArrayList<>();
+//                for (int i = 0; i < 5; i++) {
+//                    childItemList.add(new SubcategoryChildListItem());
+//                }
+//                subcategoryParentListItem.setChildItemList(childItemList);
+//                parentListItems.add(subcategoryParentListItem);
+//            }
+
+            List<ParentListItem> l1 = new ArrayList<>();
 
 
-            lLayout = new GridLayoutManager(getActivity(), 2);
+            for (SubCategory subs : m.getSubCategories()) {
+                SubcategoryParentListItem m1 = new SubcategoryParentListItem(subs);
+                m1.setChildItemList(subs.getProducts());
+                l1.add(m1);
+            }
 
-            adapter = new ExpandableRecyclerViewAdapter(getActivity(), m);
-            adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
+
+
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recycler.setAdapter(adapter);
+            recycler.setAdapter(new SubCategoryExpandableRecyclerAdapter(getContext(), l1));
+
+            System.out.println("GENERATED RECYCLER");
+
+
+//
+//            lLayout = new GridLayoutManager(getActivity(), 2);
+//
+//            adapter = new ExpandableRecyclerViewAdapter(getActivity(), m);
+//            adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
+//            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            recycler.setAdapter(adapter);
 
             return rootView;
         } else {
