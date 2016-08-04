@@ -31,4 +31,5 @@ dependencies {
     compile files('libs/java-json.jar')
     compile 'com.github.grennis:ExpandableRecyclerView:0.9.3'
     compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.github.kevinsawicki:http-request:6.0'
 }

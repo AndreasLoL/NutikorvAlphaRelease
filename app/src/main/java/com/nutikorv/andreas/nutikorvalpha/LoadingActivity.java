@@ -105,7 +105,7 @@ public class LoadingActivity extends AppCompatActivity {
                     t2.setText("Otsin eelmisi versioone.");
                 }
             }
-        }).execute("https://script.googleusercontent.com/macros/echo?user_content_key=6TYYREg7xPq7Xy2zCBrLcOluzjBzEMEeKmLJzPrTnxak0gJKoGYpoi1IhHR2fs1vFzfq-YH-HWYbTroLmYynGEohNi8tbX4dOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa1ZsYSbt7G4nMhEEDL32U4DxjO7V7yvmJPXJTBuCiTGh3rUPjpYM_V0PJJG7TIaKp8cGSZx_xYuyJMXUeN2rZkXdqYzuG_R6Jippy430I3ogteoSsJwqaprbPnRddBTX1zEidwIB2AQJIW1xFZ9DoEE&lib=MbpKbbfePtAVndrs259dhPT7ROjQYJ8yx");
+        }).execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0&sheet=version");
 
     }
 

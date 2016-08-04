@@ -1,6 +1,10 @@
 package com.nutikorv.andreas.nutikorvalpha.Objects;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.github.kevinsawicki.http.HttpRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -9,6 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
 public class ProductsFromURL extends AsyncTask<String, Void, String> {
     AsyncResult callback;
     public ProductsFromURL(AsyncResult callback) {
@@ -39,24 +46,39 @@ public class ProductsFromURL extends AsyncTask<String, Void, String> {
     }
     private String downloadUrl(String urlString) throws IOException {
         InputStream is = null;
+
         try {
-            URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            // Starts the query
-            conn.connect();
-            int responseCode = conn.getResponseCode();
-            is = conn.getInputStream();
-            String contentAsString = convertStreamToString(is);
-            return contentAsString;
-        } finally {
-            if (is != null) {
-                is.close();
-            }
+            HttpRequest req = HttpRequest.get(urlString);
+            req.trustAllCerts();
+            req.trustAllHosts(); //If you are having certificate problems
+            String body = req.body();
+            return body;
+        } catch (Exception e) {
+            return null;
         }
+
+
+
+
+
+//
+//            URL url = new URL(urlString);
+//            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+//            conn.setReadTimeout(10000 /* milliseconds */);
+//            conn.setConnectTimeout(15000 /* milliseconds */);
+//            conn.setRequestMethod("GET");
+//            conn.setDoInput(true);
+//            // Starts the query
+//            conn.connect();
+//            int responseCode = conn.getResponseCode();
+//            is = conn.getInputStream();
+//            String contentAsString = convertStreamToString(is);
+//            return contentAsString;
+//        } finally {
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
     }
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

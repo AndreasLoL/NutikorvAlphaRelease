@@ -39,7 +39,11 @@ public class ExpandableRecyclerViewAdapter extends ExpandableRecyclerAdapter<Exp
 
         this.products = hashmapToProducts(c.getHashMapProducts());
 
+
+
         setItems(products);
+
+        notifyDataSetChanged();
 
     }
 
@@ -289,12 +293,16 @@ public class ExpandableRecyclerViewAdapter extends ExpandableRecyclerAdapter<Exp
     public void onBindViewHolder(ExpandableRecyclerAdapter.ViewHolder holder, final int position) {
         switch (getItemViewType(position)) {
             case TYPE_HEADER:
+                System.out.println("CASE1 POS" + position);
                 ((HeaderViewHolder) holder).bind(position);
                 break;
             case TYPE_PERSON:
+                System.out.println("CASE2 POS" + position);
             default:
                 if (holder instanceof ProductViewHolder) {
                     final ProductViewHolder temp = (ProductViewHolder) holder;
+
+
 
                     temp.getAddButton().setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -305,6 +313,8 @@ public class ExpandableRecyclerViewAdapter extends ExpandableRecyclerAdapter<Exp
                             } catch (Exception e) {
                                 qt = 1;
                             }
+                            System.out.println("POS" + temp.getPosition());
+                            System.out.println("CLICK POS " + position);
                             GlobalParameters.b.addToBasket(products.get(position).getP(), qt);
                             InputMethodManager imm = (InputMethodManager) v.getContext()
                                     .getSystemService(Context.INPUT_METHOD_SERVICE);
