@@ -125,6 +125,18 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
 
 
+            SubCategoryExpandableRecyclerAdapter adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+            adapter1.setExpandCollapseListener(new com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter.ExpandCollapseListener() {
+                @Override
+                public void onListItemExpanded(int i) {
+                    //// TODO: 8/7/2016 Collapse other when new opened
+                }
+
+                @Override
+                public void onListItemCollapsed(int i) {
+                    //// TODO: 8/7/2016 Collapse other when new opened
+                }
+            });
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             recycler.setAdapter(new SubCategoryExpandableRecyclerAdapter(getContext(), l1));
 

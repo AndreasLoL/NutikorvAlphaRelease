@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.support.annotation.RequiresPermission;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -61,6 +60,18 @@ public class LoadingActivity extends AppCompatActivity {
 //
 //        System.out.println(g.toJson(r1.getCategories().get(3)));
 
+        if (!isOnline()) {
+            if (version == 1 || s.getString(ALL_PRODUCTS, "").equals("")) {
+                System.out.println("INITIAL PRODUCTS MISSING");
+                return;
+            } else {
+                System.out.println("IS OFFLINE BUT FOUND PRODUCTS");
+                GlobalParameters.r = g.fromJson(s.getString(ALL_PRODUCTS, ""), ReadProducts.class);
+                callStore();
+                return;
+            }
+        }
+
 
         new ProductsFromURL(new AsyncResult() {
             @Override
@@ -94,10 +105,6 @@ public class LoadingActivity extends AppCompatActivity {
                        GlobalParameters.r = g.fromJson(str.toString(), ReadProducts.class);
                         callStore();
                     }
-
-
-
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -124,7 +124,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
             add = (Button) itemView.findViewById(R.id.addButton);
 
             quantity = (EditText) itemView.findViewById(R.id.quantityField);
-
         }
     }
 }
