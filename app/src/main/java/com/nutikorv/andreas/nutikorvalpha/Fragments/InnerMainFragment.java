@@ -64,6 +64,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     private boolean lvBusy = false;
     RecyclerView recycler;
     ProductListAdapter adapterProducts;
+    int activeGroup = -1;
 
     private GridLayoutManager lLayout;
 
@@ -83,36 +84,16 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_products_inner, container, false);
 
-//        ExpandableListView choices = (ExpandableListView) rootView.findViewById(R.id.listView);
         recycler = (RecyclerView) rootView.findViewById(R.id.main_recycler);
 
         String s = getArguments().getString("products", null);
-
-        System.out.println("CALLED INSTANCED PRODUCTS FROM INNER FRAGMENT: " + s);
 
         Gson g = new Gson();
 
         MainCategory m = g.fromJson(s, MainCategory.class);
 
 
-
         if (GlobalParameters.r != null) {
-//            final HashMap<String, List<Product>> t = new HashMap<>();
-//            List<SubcategoryParentListItem> subcategoryParentListItems = new ArrayList<>();
-//            for (int i = 0; i < 5; i++) {
-//                SubcategoryParentListItem eachParentItem = new SubcategoryParentListItem();
-//                subcategoryParentListItems.add(eachParentItem);
-//            }
-//
-//            List<ParentListItem> parentListItems = new ArrayList<>();
-//            for (SubcategoryParentListItem subcategoryParentListItem : subcategoryParentListItems) {
-//                List<SubcategoryChildListItem> childItemList = new ArrayList<>();
-//                for (int i = 0; i < 5; i++) {
-//                    childItemList.add(new SubcategoryChildListItem());
-//                }
-//                subcategoryParentListItem.setChildItemList(childItemList);
-//                parentListItems.add(subcategoryParentListItem);
-//            }
 
             List<ParentListItem> l1 = new ArrayList<>();
 
@@ -124,118 +105,14 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
             }
 
 
+            final SubCategoryExpandableRecyclerAdapter adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
 
-            SubCategoryExpandableRecyclerAdapter adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
-            adapter1.setExpandCollapseListener(new com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter.ExpandCollapseListener() {
-                @Override
-                public void onListItemExpanded(int i) {
-                    //// TODO: 8/7/2016 Collapse other when new opened
-                }
-
-                @Override
-                public void onListItemCollapsed(int i) {
-                    //// TODO: 8/7/2016 Collapse other when new opened
-                }
-            });
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             recycler.setAdapter(new SubCategoryExpandableRecyclerAdapter(getContext(), l1));
 
-            System.out.println("GENERATED RECYCLER");
-
-
-//
-//            lLayout = new GridLayoutManager(getActivity(), 2);
-//
-//            adapter = new ExpandableRecyclerViewAdapter(getActivity(), m);
-//            adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
-//            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            recycler.setAdapter(adapter);
 
             return rootView;
-        } else {
-//            GlobalParameters.r = new ReadProducts(mActivity, "products.txt");
-//
-//            final HashMap<String, List<Product>> t = new HashMap<>();
-//
-//
-//            new ProductsFromURL(new AsyncResult() {
-//                @Override
-//                public void onResult(JSONObject object) {
-//                    try {
-//                        JSONArray rows = object.getJSONArray("entry");
-//                        for (int i = 0; i < rows.length(); i++) {
-//                            JSONObject t1 = rows.getJSONObject(i);
-//                            JSONObject t2 = t1.getJSONObject("content");
-//                            String t3 = t2.getString("$t");
-//                            GlobalParameters.r.loadProducstFromArary(t3.split(", "));
-//                        }
-//
-//                        t.put("viinad", GlobalParameters.r.getProductsList());
-//
-//                        t.put("Liha", GlobalParameters.r.getProductsList());
-//
-//                        lLayout = new GridLayoutManager(getActivity(), 2);
-//
-//                        adapter = new ExpandableRecyclerViewAdapter(getActivity(), t);
-//                        adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
-//                        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-//                        recycler.setAdapter(adapter);
-//
-//
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).execute("https://spreadsheets.google.com/feeds/list/1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0/od6/public/basic?alt=json");
-
         }
-
-
-
-//        t.put("viinad", r.getProductsList());
-//
-//        t.put("Liha", r.getProductsList());
-//
-//        lLayout = new GridLayoutManager(getActivity(), 2);
-//
-//        adapter = new ExpandableRecyclerViewAdapter(getActivity(), t);
-//        adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
-//        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recycler.setAdapter(adapter);
-//        adapter.setOnCardClickListner(this);
-
-
-
-
-
-
-//        adapter = new ExpandableAdapter(mActivity, r.getGroupList(), r.getFoodCollection());
-//
-//
-//
-//
-//        choices.setAdapter(adapter);
-//
-//        if (GlobalParameters.b == null) {
-//            GlobalParameters.b = new Basket("My temporary basket!");
-//        }
-//
-//        choices.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-//
-//                createProductDialog((Product) adapter.getChild(groupPosition, childPosition), getContext());
-//
-//
-////                Product temp = (Product) adapter.getChild(groupPosition, childPosition);
-////
-////                GlobalParameters.b.addToBasket(temp);
-////                Toast.makeText(getContext(), "Added to basket!", Toast.LENGTH_SHORT).show();
-//
-//                return false;
-//            }
-//        });
 
         return rootView;
     }

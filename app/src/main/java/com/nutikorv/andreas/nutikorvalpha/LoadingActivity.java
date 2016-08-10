@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -44,32 +45,10 @@ public class LoadingActivity extends AppCompatActivity {
         final int version = s.getInt(STORED_VERSION, 1);
 
         final Gson g = new Gson();
-//
-//        Product p1 = new Product("1", 1, 2, 3, "5", "6", "7");
-//
-//        SubCategory s1 = new SubCategory("SUBBIE");
-//
-//        MainCategory m1 = new MainCategory("MAINIE");
-
-//        s1.addProduct(p1);
-//        m1.addSubCategory(s1);
-//
-//        ReadProducts r1 = new ReadProducts();
-//
-//        r1.addMainCategory(m1);
-//
-//        System.out.println(g.toJson(r1.getCategories().get(3)));
 
         if (!isOnline()) {
-            if (version == 1 || s.getString(ALL_PRODUCTS, "").equals("")) {
-                System.out.println("INITIAL PRODUCTS MISSING");
-                return;
-            } else {
-                System.out.println("IS OFFLINE BUT FOUND PRODUCTS");
-                GlobalParameters.r = g.fromJson(s.getString(ALL_PRODUCTS, ""), ReadProducts.class);
-                callStore();
-                return;
-            }
+            attemptConnectionless(s, t1, t2);
+            return;
         }
 
 
@@ -108,12 +87,35 @@ public class LoadingActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    t1.setText("Versiooni kontroll ebaõnnestus!");
-                    t2.setText("Otsin eelmisi versioone.");
+                    attemptConnectionless(s, t1, t2);
                 }
             }
         }).execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0&sheet=version");
 
+    }
+
+    private void attemptConnectionless(SharedPreferences s, TextView upperText, TextView lowerText) {
+
+        final int version = s.getInt(STORED_VERSION, 1);
+        final Gson g = new Gson();
+
+        if (version == 1 || s.getString(ALL_PRODUCTS, "").equals("")) {
+            upperText.setText("Ühendus toodete andmebaasiga puudub!");
+            lowerText.setText("Palun proovige hiljem uuesti!");
+        } else {
+            GlobalParameters.r = g.fromJson(s.getString(ALL_PRODUCTS, ""), ReadProducts.class);
+
+            upperText.setText("Ühendus toodete andmebaasiga puudub!");
+            lowerText.setText("Kasutan viimati laetud tooteid!");
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    callStore();
+                }
+            }, 1000);
+
+        }
     }
 
     private void callStore() {
@@ -201,8 +203,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    t1.setText("Toodete laadimine ebaõnnestus!");
-                    t2.setText("Palun proovida hiljem uuesti.");
+                    attemptConnectionless(s, t1, t2);
 
                 }
             }
