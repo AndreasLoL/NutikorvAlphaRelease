@@ -5,15 +5,13 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_home">Alkohoolsed joogid</string>
-    <string name="nav_item_home2">Piimatooted</string>
+    <string name="nav_item_home">Tooted</string>
     <string name="nav_item_friends">Ostukorvid</string>
     <string name="nav_item_notifications">Allahindlused</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
-        <item>@string/nav_item_home2</item>
         <item>@string/nav_item_friends</item>
         <item>@string/nav_item_notifications</item>
     </string-array>

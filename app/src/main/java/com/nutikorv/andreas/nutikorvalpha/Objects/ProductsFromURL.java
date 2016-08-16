@@ -34,11 +34,13 @@ public class ProductsFromURL extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         // remove the unnecessary parts from the response and construct a JSON
+//        System.out.println("CLEAN RESULT");
+//        System.out.println(result);
         int start = result.indexOf("{", result.indexOf("{") + 1);
         int end = result.lastIndexOf("}");
         String jsonResponse = result.substring(start, end);
         try {
-            JSONObject table = new JSONObject(jsonResponse);
+            JSONObject table = new JSONObject(result);
             callback.onResult(table);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -46,6 +48,7 @@ public class ProductsFromURL extends AsyncTask<String, Void, String> {
     }
     private String downloadUrl(String urlString) throws IOException {
         InputStream is = null;
+
 
         try {
             HttpRequest req = HttpRequest.get(urlString);

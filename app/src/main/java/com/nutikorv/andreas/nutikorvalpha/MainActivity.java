@@ -112,18 +112,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Gson g = new Gson();
         switch (position) {
             case 0:
-                fragment = new HomeFragment().newInstance(g.toJson(GlobalParameters.r.getCategories().get(0)));
+                fragment = new HomeFragment();
                 title = getString(R.string.title_home);
                 break;
             case 1:
-                fragment = new HomeFragment().newInstance(g.toJson(GlobalParameters.r.getCategories().get(1)));
-                title = getString(R.string.title_home);
-                break;
-            case 2:
                 fragment = new BasketFragment();
                 title = getString(R.string.title_friends);
                 break;
-            case 3:
+            case 2:
                 fragment = new SalesFragment();
                 title = getString(R.string.title_messages);
                 break;
@@ -141,4 +137,5 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             getSupportActionBar().setTitle(title);
         }
     }
+
 }

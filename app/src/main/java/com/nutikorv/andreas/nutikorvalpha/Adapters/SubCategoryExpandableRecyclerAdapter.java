@@ -1,10 +1,15 @@
 package com.nutikorv.andreas.nutikorvalpha.Adapters;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +39,9 @@ import java.util.List;
 public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdapter<SubCategoryExpandableRecyclerAdapter.MyParentViewHolder, SubCategoryExpandableRecyclerAdapter.MyChildViewHolder> {
     private LayoutInflater mInflater;
 
+    private static final float INITIAL_POSITION = 0.0f;
+    private static final float ROTATED_POSITION = 180f;
+
     public SubCategoryExpandableRecyclerAdapter(Context context, List<ParentListItem> itemList) {
         super(itemList);
         mInflater = LayoutInflater.from(context);
@@ -45,9 +53,10 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
         return new MyParentViewHolder(view);
     }
 
+
     @Override
     public MyChildViewHolder onCreateChildViewHolder(ViewGroup viewGroup) {
-        View view = mInflater.inflate(R.layout.item_product, viewGroup, false);
+        View view = mInflater.inflate(R.layout.item_product_new, viewGroup, false);
         return new MyChildViewHolder(view);
     }
 
@@ -226,6 +235,7 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
         childViewHolder.productName.setText(subcategoryChildListItem.getName());
         UrlImageViewHelper.setUrlDrawable(childViewHolder.img, subcategoryChildListItem.getImgURL());
 
+
         childViewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,11 +257,53 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
     public class MyParentViewHolder extends ParentViewHolder {
 
         public TextView lblListHeader;
+        public ImageView mArrowExpandImageView;
 
         public MyParentViewHolder(View itemView) {
             super(itemView);
             lblListHeader = (TextView) itemView.findViewById(R.id.item_header_name);
+            mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.item_arrow);
+
+
         }
+
+        @Override
+        public void setExpanded(boolean expanded) {
+            super.setExpanded(expanded);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                if (expanded) {
+                    mArrowExpandImageView.setRotation(ROTATED_POSITION);
+                } else {
+                    mArrowExpandImageView.setRotation(INITIAL_POSITION);
+                }
+            }
+        }
+
+        @Override
+        public void onExpansionToggled(boolean expanded) {
+            super.onExpansionToggled(expanded);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                RotateAnimation rotateAnimation;
+                if (expanded) { // rotate clockwise
+                    rotateAnimation = new RotateAnimation(ROTATED_POSITION,
+                            INITIAL_POSITION,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                } else { // rotate counterclockwise
+                    rotateAnimation = new RotateAnimation(-1 * ROTATED_POSITION,
+                            INITIAL_POSITION,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                            RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+                }
+
+                rotateAnimation.setDuration(200);
+                rotateAnimation.setFillAfter(true);
+                mArrowExpandImageView.startAnimation(rotateAnimation);
+            }
+        }
+
+
+
     }
 
     @Override
@@ -260,6 +312,7 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
         collapseAllParents();    // Alternatively keep track of the single item that is expanded and explicitly collapse that row (more efficient)
         expandParent(((ParentWrapper) parent).getParentListItem());
     }
+
 
     @Override
     public void collapseAllParents() {

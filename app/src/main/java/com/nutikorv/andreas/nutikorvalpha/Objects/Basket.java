@@ -6,6 +6,7 @@ package com.nutikorv.andreas.nutikorvalpha.Objects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class Basket {
 
-    public HashMap<Product, Integer> getAllProducts() {
+    public LinkedHashMap<Product, Integer> getAllProducts() {
         return allHashProducts;
     }
 
@@ -53,7 +54,7 @@ public class Basket {
 
     private List<Product> allProducts = new ArrayList<>();
 
-    private HashMap<Product, Integer> allHashProducts = new HashMap<>();
+    private LinkedHashMap<Product, Integer> allHashProducts = new LinkedHashMap<>();
 
     private String basketName;
 

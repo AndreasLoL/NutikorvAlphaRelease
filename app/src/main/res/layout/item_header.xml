@@ -5,20 +5,23 @@
     android:padding="8dp"
     android:background="@color/colorAccent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp">
 
     <ImageView android:id="@+id/item_header_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
-        android:src="@drawable/ic_search_action"/>
+        android:src="@drawable/abc_ic_go_search_api_material"
+        android:layout_marginTop="5dp" />
 
     <TextView android:id="@+id/item_header_name"
         tools:text="Group Name"
         android:textStyle="bold"
         android:layout_weight="1"
         android:layout_marginLeft="8dp"
+        android:textSize="20dp"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -27,6 +30,6 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_search_action"/>
+        android:src="@drawable/ic_arrow"/>
 
 </LinearLayout>

@@ -3,21 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/main"
     tools:context=".MainActivity">
 
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <android.support.v7.widget.RecyclerView android:id="@+id/main_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/frame" />
+
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="#2c3e50"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/frame">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="25dp"
+                android:minHeight="25dp"
+                android:foregroundGravity="center"
+                android:padding="4dp"
+                android:maxWidth="80dp"
+                android:minWidth="80dp"
+                android:gravity="center"
+                android:layout_gravity="bottom|center|right"
+                android:textColor="#fff"
+                android:textSize="15sp"
+                android:ellipsize="end"
+                android:text="Peetri ostukorv (34) 23€ - 25€" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>

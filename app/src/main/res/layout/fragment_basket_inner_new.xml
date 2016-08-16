@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="MINU OSTUKORV"
+        android:elevation="6dp"
+        android:id="@+id/textView"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:background="#2c3e50"
+        android:textColor="#ecf0f1" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="386dp"
+        android:id="@+id/basketView"
+        android:layout_above="@+id/frame"
+        android:layout_below="@+id/textView" />
+
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="#2c3e50"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/frame">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="SELVER"
+                android:textSize="12sp"
+                android:textColor="#ecf0f1"
+                android:gravity="center"
+                android:id="@+id/textView2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="$99.99"
+                android:textColor="#ecf0f1"
+                android:textSize="17sp"
+                android:id="@+id/selverPrice"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="MAXIMA"
+                android:textSize="12sp"
+                android:textColor="#ecf0f1"
+                android:gravity="center"
+                android:id="@+id/textView3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="$99.99"
+                android:textSize="17sp"
+                android:textColor="#ecf0f1"
+                android:id="@+id/maximaPrice"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:elevation="6dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="PRISMA"
+                android:textSize="12sp"
+                android:textColor="#ecf0f1"
+                android:gravity="center"
+                android:id="@+id/textView5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="$99.99"
+                android:textSize="17sp"
+                android:textColor="#ecf0f1"
+                android:id="@+id/prismaPrice"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:singleLine="true" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+</RelativeLayout>

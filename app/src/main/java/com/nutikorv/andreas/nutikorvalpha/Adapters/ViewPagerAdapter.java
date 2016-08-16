@@ -1,12 +1,13 @@
 package com.nutikorv.andreas.nutikorvalpha.Adapters;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.nutikorv.andreas.nutikorvalpha.Fragments.InnerBasketFragment;
+import com.nutikorv.andreas.nutikorvalpha.Fragments.InnerCategoryFragment;
 import com.nutikorv.andreas.nutikorvalpha.Fragments.InnerMainFragment;
 
 import java.util.HashMap;
@@ -20,13 +21,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     HashMap<Integer, String> mFragmentTags;
 
-    String s;
 
-    public ViewPagerAdapter(FragmentManager fm, String s) {
+    public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
         mFragmentTags = new HashMap<Integer,String>();
         mFragmentManager = fm;
-        this.s = s;
     }
 
 
@@ -34,8 +33,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new InnerMainFragment().newInstance(s);
+                return new InnerCategoryFragment();
             case 1:
+                return new InnerMainFragment();
+            case 2:
                 return new InnerBasketFragment();
             default:
                 break;
@@ -46,7 +47,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     public int getItemPosition(Object object) {

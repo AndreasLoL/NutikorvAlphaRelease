@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,10 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import com.innodroid.expandablerecycler.ExpandableRecyclerAdapter;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableRecyclerViewAdapter;
@@ -44,6 +46,7 @@ import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryChildListItem;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,25 +61,10 @@ import java.util.List;
  */
 public class InnerMainFragment extends Fragment implements ExpandableRecyclerViewAdapter.OnCardClickListner {
 
-
-    Activity mActivity;
-    ExpandableRecyclerViewAdapter adapter;
     private boolean lvBusy = false;
-    RecyclerView recycler;
-    ProductListAdapter adapterProducts;
-    int activeGroup = -1;
-
-    private GridLayoutManager lLayout;
-
-    public static InnerMainFragment newInstance(String mainCategory) {
-        InnerMainFragment myFragment = new InnerMainFragment();
-
-        Bundle args = new Bundle();
-        args.putString("products", mainCategory);
-        myFragment.setArguments(args);
-
-        return myFragment;
-    }
+    private RecyclerView recycler;
+    private ProductListAdapter adapterProducts;
+    private SubCategoryExpandableRecyclerAdapter adapter1;
 
 
     @Nullable
@@ -86,11 +74,24 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         recycler = (RecyclerView) rootView.findViewById(R.id.main_recycler);
 
-        String s = getArguments().getString("products", null);
+//        String s = getArguments().getString("products", null);
+//
+//        Gson g = new Gson();
+//
+//        MainCategory m = g.fromJson(s, MainCategory.class);
+//
+//        if (adapter1 != null) {
+//            adapter1.onRestoreInstanceState(savedInstanceState);
+//        }
 
-        Gson g = new Gson();
 
-        MainCategory m = g.fromJson(s, MainCategory.class);
+        MainCategory m;
+
+        if (GlobalParameters.selectedCategory == null) {
+            m = GlobalParameters.r.getCategories().get(0);
+        } else {
+            m = GlobalParameters.selectedCategory;
+        }
 
 
         if (GlobalParameters.r != null) {
@@ -105,10 +106,33 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
             }
 
 
-            final SubCategoryExpandableRecyclerAdapter adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+            adapter1.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
+                @Override
+                public void onListItemExpanded(int position) {
+                    Log.v("-------------->", "EXPAND DETECTED");
+                }
+
+                @Override
+                public void onListItemCollapsed(int position) {
+                    Log.v("-------------->", "COLLAPSE DETECTED");
+                }
+            });
+
 
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recycler.setAdapter(new SubCategoryExpandableRecyclerAdapter(getContext(), l1));
+            recycler.setAdapter(adapter1);
+
+
+
+            recycler.smoothScrollToPosition(0);
+//
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    recycler.smoothScrollToPosition(2);
+                }
+            }, 1000);
 
 
             return rootView;
@@ -117,10 +141,55 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
         return rootView;
     }
 
+
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = activity;
+    public void onResume() {
+        super.onResume();
+
+        MainCategory m;
+
+
+        if (GlobalParameters.selectedCategory == null) {
+            m = GlobalParameters.r.getCategories().get(0);
+        } else {
+            m = GlobalParameters.selectedCategory;
+        }
+
+        if (GlobalParameters.r != null) {
+
+            List<ParentListItem> l1 = new ArrayList<>();
+
+
+            for (SubCategory subs : m.getSubCategories()) {
+                SubcategoryParentListItem m1 = new SubcategoryParentListItem(subs);
+                m1.setChildItemList(subs.getProducts());
+                l1.add(m1);
+            }
+
+
+            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+
+
+            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recycler.setAdapter(adapter1);
+
+            recycler.smoothScrollToPosition(0);
+
+//
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                public void run() {
+//                    recycler.smoothScrollToPosition(0);
+//                }
+//            }, 10000);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    recycler.smoothScrollToPosition(2);
+                }
+            }, 1000);
+        }
     }
 
     private void createProductDialog(Product p, Context context) {
@@ -189,4 +258,5 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     public void OnCardClicked(View view, int position) {
         Log.d("OnClick", "Card Position" + position);
     }
+
 }

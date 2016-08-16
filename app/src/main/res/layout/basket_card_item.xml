@@ -8,7 +8,9 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="#fff"
     app:cardCornerRadius="2dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +44,7 @@
 
             <TextView
                 android:id="@+id/selverPrice"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:background="#e74c3c"
                 android:padding="4dp"
@@ -57,7 +59,7 @@
 
             <TextView
                 android:id="@+id/prismaPrice"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:maxWidth="80dp"
                 android:minWidth="80dp"
                 android:layout_height="wrap_content"
@@ -71,7 +73,7 @@
 
             <TextView
                 android:id="@+id/maximaPrice"
-                android:layout_width="80dp"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:background="#e74c3c"
                 android:padding="4dp"
