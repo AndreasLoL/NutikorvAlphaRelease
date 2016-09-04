@@ -1,5 +1,7 @@
 package com.nutikorv.andreas.nutikorvalpha.Objects;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +16,8 @@ import java.util.List;
 public class ReadProducts {
 
     private List<MainCategory> categories;
+
+    private List<OnSaleProduct> onSaleProducts;
 
     public List<MainCategory> getCategories() {
         return categories;
@@ -34,6 +38,8 @@ public class ReadProducts {
     public ReadProducts() {
 
         categories = new ArrayList<>();
+
+        onSaleProducts = new ArrayList<>();
 
 //        categories.add(new MainCategory("Alkohol"));
 //
@@ -78,8 +84,20 @@ public class ReadProducts {
 //        }
 //    }
 
+
+    public List<OnSaleProduct> getOnSaleProducts() {
+        return onSaleProducts;
+    }
+
     public void loadProductsFromJSON(JSONObject o1) throws JSONException {
-        Product p = new Product(o1.getString("nimi"), o1.getDouble("prisma"), o1.getDouble("selver"), o1.getDouble("maxima"), o1.getString("EAN"), o1.getString("pilt"), "See on toode!");
+        Product p = new Product(o1.getString("nimi"), o1.getDouble("prisma"), o1.getDouble("selver"), o1.getDouble("maxima"), o1.getString("EAN"), o1.getString("pilt"), "See on toode!", o1.getInt("selverp"), o1.getInt("prismap"), o1.getInt("maximap"));
+
+        if (!(o1.getDouble("prismap") == 0.0)) {
+            OnSaleProduct osp = new OnSaleProduct(o1.getString("nimi"), "Prisma", o1.getDouble("prisma"), o1.getDouble("prismap"), o1.getString("prismap_end"), o1.getString("EAN"), o1.getString("pilt"), o1.getString("peakategooria"));
+            Log.d("------------->", "ON SALE PRODUCT ADDED " + o1.getString("nimi"));
+            onSaleProducts.add(osp);
+        }
+
 
 //        for (MainCategory c : categories) {
 //            if (c.getName().equals(o1.getString("peakategooria"))) {
@@ -139,6 +157,8 @@ public class ReadProducts {
 
     public void loadProducstFromArary(String[] params) {
 
+        //todo: add onSale
+
         String name = params[3].split(": ")[1];
         Double selverPrice = 0.0;
         if (!params[6].split(": ")[1].equals("puudub")) {
@@ -159,7 +179,7 @@ public class ReadProducts {
         String description = "Toote kirjeldus puudub, miks?";
 
 
-        Product temp = new Product(name, prismaPrice, selverPrice, maximaPrice, EAN, URL, description);
+        Product temp = new Product(name, prismaPrice, selverPrice, maximaPrice, EAN, URL, description, 0, 0, 0);
 
 
         String innerCategory = params[1].split(": ")[1];

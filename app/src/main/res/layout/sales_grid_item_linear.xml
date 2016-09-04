@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FFFF">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:id="@+id/gridImage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:textSize="12sp"
+        android:id="@+id/gridName"
+        android:lines="2"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:maxLines="2" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="31dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="34dp"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0.99€"
+            android:paddingLeft="2dp"
+            android:textSize="12sp"
+            android:id="@+id/gridOldPrice"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="543.99€"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/gridPrice"
+            android:background="@drawable/rounded_corner_textview"
+            android:gravity="center"
+            android:textColor="#FFFF"
+            android:textSize="15sp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="1dp"
+            android:maxWidth="70dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="+"
+            android:id="@+id/textView4"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dp"
+            android:gravity="center" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:text="LISA"
+            android:id="@+id/button"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="- "
+            android:id="@+id/textView6"
+            android:layout_weight="1"
+            android:layout_marginRight="3dp"
+            android:gravity="center" />
+    </LinearLayout>
+</LinearLayout>

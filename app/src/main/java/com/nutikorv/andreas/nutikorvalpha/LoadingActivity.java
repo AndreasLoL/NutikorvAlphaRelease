@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,6 +29,28 @@ public class LoadingActivity extends AppCompatActivity {
     public static final String STORED_VERSION = "currentVersion";
 
     public static final String ALL_PRODUCTS = "allProducts";
+
+    private AsyncResult a1;
+
+    private ProductsFromURL p1;
+
+    private boolean hasChanged = false;
+
+    private Handler mHandler;
+
+    private Thread mThread;
+
+    private boolean isActivityDestroyed = false;
+
+
+    @Override
+    public void onDestroy () {
+        Log.i("---------->", "THREAD CANCELED");
+        mHandler.removeCallbacks(mThread);
+        isActivityDestroyed = true;
+        super.onDestroy ();
+
+    }
 
 
 
@@ -52,19 +76,49 @@ public class LoadingActivity extends AppCompatActivity {
             return;
         }
 
+        final int[] v = {-1};
 
+        mHandler = new Handler();
+        mThread = new Thread() {
+            @Override
+            public void run() {
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        if(!isActivityDestroyed){
+                            System.out.println("V IS " + v[0]);
+                            if (v[0] == -1) {
+                                attemptConnectionless(s, t1, t2);
+                                p1.cancel(true);
+                            } else {
+                                System.out.println("GOT VERSION, NOT GOING OFFLINE!");
+                            }
+                        } else {
+                            Log.i("------>", "CANCELED POST DELAYED PROCESS!");
+                        }
 
-        new ProductsFromURL(new AsyncResult() {
+                    }
+                }, 5000);
+            }
+        };
+
+        mThread.start();
+
+        a1 = new AsyncResult() {
             @Override
             public void onResult(JSONObject object) {
                 try {
+
+                    if (hasChanged) {
+                        return;
+                    }
+
                     JSONArray a1 = (JSONArray) object.get("version");
                     JSONObject o1 = a1.getJSONObject(0);
-                    int v = o1.getInt("version");
+                    v[0] = o1.getInt("version");
 
-                    System.out.println("INNER VERSION " + v + " OUTTER VERSION " + version);
+                    System.out.println("INNER VERSION " + v[0] + " OUTTER VERSION " + version);
 
-                    if (v > version) {
+                    if (v[0] > version) {
 
                         t1.setText("TOODETE UUENDUS TUVASTATUD");
                         t2.setText("TOIMUB TOODETE UUENDUS, PALUN OODAKE");
@@ -76,11 +130,11 @@ public class LoadingActivity extends AppCompatActivity {
                         }
 
 
-                        System.out.println("VERSION UPDATED TO " + v);
+                        System.out.println("VERSION UPDATED TO " + v[0]);
                         System.out.println("SDK VERSION DETECTED" + Build.VERSION.SDK_INT);
 
                         SharedPreferences.Editor editor = s.edit();
-                        editor.putInt(STORED_VERSION, v);
+                        editor.putInt(STORED_VERSION, v[0]);
                         editor.commit();
 
 
@@ -91,7 +145,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                         String str = s.getString(ALL_PRODUCTS, g.toJson(new ReadProducts()));
 
-                       GlobalParameters.r = g.fromJson(str.toString(), ReadProducts.class);
+                        GlobalParameters.r = g.fromJson(str.toString(), ReadProducts.class);
                         callStore();
                     }
 
@@ -100,11 +154,66 @@ public class LoadingActivity extends AppCompatActivity {
                     attemptConnectionless(s, t1, t2);
                 }
             }
-        }).execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0&sheet=version");
+        };
+
+        p1 = new ProductsFromURL(a1);
+        p1.execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0&sheet=version");
+
+
+
+//        new ProductsFromURL(new AsyncResult() {
+//            @Override
+//            public void onResult(JSONObject object) {
+//                try {
+//                    JSONArray a1 = (JSONArray) object.get("version");
+//                    JSONObject o1 = a1.getJSONObject(0);
+//                    v[0] = o1.getInt("version");
+//
+//                    System.out.println("INNER VERSION " + v[0] + " OUTTER VERSION " + version);
+//
+//                    if (v[0] > version) {
+//
+//                        t1.setText("TOODETE UUENDUS TUVASTATUD");
+//                        t2.setText("TOIMUB TOODETE UUENDUS, PALUN OODAKE");
+//
+//                        if (Build.VERSION.SDK_INT < 19) {
+//                            LoadProducts(t1, t2);
+//                        } else {
+//                            loadProductsJSON(t1, t2);
+//                        }
+//
+//
+//                        System.out.println("VERSION UPDATED TO " + v[0]);
+//                        System.out.println("SDK VERSION DETECTED" + Build.VERSION.SDK_INT);
+//
+//                        SharedPreferences.Editor editor = s.edit();
+//                        editor.putInt(STORED_VERSION, v[0]);
+//                        editor.commit();
+//
+//
+//                    } else {
+//                        System.out.println("SAME VERSION, NO CHANGE!");
+//                        t1.setText("SAMA VERSIOON");
+//                        t2.setText("TOODETE LAADIMINE MÄLUST");
+//
+//                        String str = s.getString(ALL_PRODUCTS, g.toJson(new ReadProducts()));
+//
+//                        GlobalParameters.r = g.fromJson(str.toString(), ReadProducts.class);
+//                        callStore();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    attemptConnectionless(s, t1, t2);
+//                }
+//            }
+//        }).execute("https://script.google.com/macros/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0&sheet=version");
 
     }
 
     private void attemptConnectionless(SharedPreferences s, TextView upperText, TextView lowerText) {
+
+        System.out.println("GOING OFFLINE");
 
         final int version = s.getInt(STORED_VERSION, 1);
         final Gson g = new Gson();

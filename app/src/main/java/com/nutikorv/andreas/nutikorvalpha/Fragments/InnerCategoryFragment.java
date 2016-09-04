@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
+import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.MainActivity;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
@@ -23,6 +25,8 @@ public class InnerCategoryFragment extends Fragment {
     ViewPager viewPager = HomeFragment.viewPager;
 
     Activity mActivity;
+
+    GridView gridView;
 
     public InnerCategoryFragment() {
         // Required empty public constructor
@@ -38,21 +42,35 @@ public class InnerCategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_categories_inner, container, false);
 
-        ListView l1 = (ListView) rootView.findViewById(R.id.categoriesView);
+//        ListView l1 = (ListView) rootView.findViewById(R.id.categoriesView);
+//
+//        ArrayAdapter<String> a1 = new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, GlobalParameters.r.getCategoriesString());
+//
+//        l1.setAdapter(a1);
+//
+//        l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                GlobalParameters.selectedCategory = GlobalParameters.r.getCategories().get(position);
+//                viewPager.setCurrentItem(1, true);
+//
+//
+//                HomeFragment TabOfFragManage1 = (HomeFragment) getParentFragment();
+//
+//                TabOfFragManage1.resetCategories();
+//            }
+//        });
 
-        ArrayAdapter<String> a1 = new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, GlobalParameters.r.getCategoriesString());
+        gridView = (GridView) rootView.findViewById(R.id.gridView);
 
-        l1.setAdapter(a1);
+        gridView.setAdapter(new GridViewAdapter(getContext(), GlobalParameters.r.getCategories()));
 
-        l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
                 GlobalParameters.selectedCategory = GlobalParameters.r.getCategories().get(position);
                 viewPager.setCurrentItem(1, true);
-
-
                 HomeFragment TabOfFragManage1 = (HomeFragment) getParentFragment();
-
                 TabOfFragManage1.resetCategories();
             }
         });

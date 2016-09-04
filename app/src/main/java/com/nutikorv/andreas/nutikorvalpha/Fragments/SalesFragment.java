@@ -3,11 +3,27 @@ package com.nutikorv.andreas.nutikorvalpha.Fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
+import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewScrollable;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.SalesGridViewAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.ShopRecyclerAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.SponsorRecyclerAdapter;
+import com.nutikorv.andreas.nutikorvalpha.CategoryGridViewAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Objects.OnSaleProduct;
+import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ANDREAS on 12.07.2016.
@@ -28,6 +44,59 @@ public class SalesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sales, container, false);
+
+        GridViewScrollable g1 = (GridViewScrollable) rootView.findViewById(R.id.salesGridView);
+
+        g1.setAdapter(new CategoryGridViewAdapter(getContext()));
+
+        g1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+
+                // Create new fragment and transaction
+                Fragment newFragment = new SaleDisplayFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+                transaction.replace(R.id.container_body, newFragment);
+                transaction.addToBackStack(null);
+
+// Commit the transaction
+                transaction.commit();
+
+            }
+        });
+
+//        g1.setAdapter(new SalesGridViewAdapter(getContext()));
+
+        RecyclerView r1 = (RecyclerView) rootView.findViewById(R.id.sponsorGridView);
+
+        List<OnSaleProduct> sponsor = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            sponsor.add(GlobalParameters.r.getOnSaleProducts().get(i + 10));
+        }
+
+        r1.setAdapter(new SponsorRecyclerAdapter(getContext(), sponsor));
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+
+        r1.setLayoutManager(gridLayoutManager);
+
+        RecyclerView r2 = (RecyclerView) rootView.findViewById(R.id.shopGridView);
+
+        r2.setAdapter(new ShopRecyclerAdapter(getContext()));
+
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+
+
+        r2.setLayoutManager(gridLayoutManager2);
+
+
+
+
 
 
         // Inflate the layout for this fragment

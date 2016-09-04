@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="#fff"
+    app:cardCornerRadius="2dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="3dp">
+
+    <RelativeLayout
+        android:layout_width="180dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ecf0f1"
+            android:weightSum="1"
+            android:elevation="3dp"
+            android:id="@+id/layout"
+            android:layout_gravity="top"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="SELVER"
+                android:textColor="#CF000F"
+                android:id="@+id/textView7" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="KUNI 29.09"
+                android:textSize="15dp"
+                android:id="@+id/textView8"
+                android:gravity="center|right"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="TOOTE NIMI LUUUL"
+            android:id="@+id/gridName"
+            android:layout_below="@+id/layout"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:elegantTextHeight="false"
+            android:maxLines="2"
+            android:minLines="1"
+            android:lines="2" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/layout2"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gridName"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="53.99€"
+                android:id="@+id/gridPrice"
+                android:textSize="32sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:paddingLeft="6dp"
+                android:text="0.99€"
+                android:id="@+id/gridOldPrice"
+                android:textSize="20sp"
+                android:gravity="left" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_alignParentEnd="true">
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout2">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/gridImage"
+                    android:layout_below="@id/layout2"
+                    android:minHeight="85dp" />
+
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="44dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="29%"
+                    android:textColor="#FFFF"
+                    android:id="@+id/textView9"
+                    android:background="@drawable/triangle_drawalbe"
+                    android:layout_gravity="right|top"
+                    android:gravity="top|right" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="0.65"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:id="@+id/imageView"
+                        android:src="@mipmap/minus_sign"
+                        android:layout_gravity="left|bottom"
+                        android:layout_weight="0.75" />
+
+                    <EditText
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:ems="10"
+                        android:id="@+id/editText"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:layout_weight="0" />
+
+                    <ImageView
+                        android:layout_width="33dp"
+                        android:layout_height="37dp"
+                        android:id="@+id/imageView2"
+                        android:src="@mipmap/plus_sign"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="0.75" />
+                </LinearLayout>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LISA"
+                    android:id="@+id/gridAdd" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

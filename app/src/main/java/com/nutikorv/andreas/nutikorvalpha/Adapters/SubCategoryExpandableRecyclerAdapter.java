@@ -1,6 +1,7 @@
 package com.nutikorv.andreas.nutikorvalpha.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
+import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
@@ -31,6 +33,7 @@ import com.nutikorv.andreas.nutikorvalpha.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -67,162 +70,46 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
 
     }
 
+    private void onSaleColor(boolean onSale, TextView t1) {
+        if (onSale) {
+            t1.setTextColor(Color.YELLOW);
+        }
+    }
+
+    @SuppressWarnings("ResourceType")
     private void setPriceColors(Product currentProduct, MyChildViewHolder childViewHolder) {
-        childViewHolder.selverPrice.setVisibility(View.VISIBLE);
-        childViewHolder.maximaPrice.setVisibility(View.VISIBLE);
-        childViewHolder.prismaPrice.setVisibility(View.VISIBLE);
-        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-        childViewHolder.selverPrice.setBackgroundResource(R.color.cheap);
+//        childViewHolder.selverPrice.setVisibility(View.VISIBLE);
+//        childViewHolder.maximaPrice.setVisibility(View.VISIBLE);
+//        childViewHolder.prismaPrice.setVisibility(View.VISIBLE);
+//        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
+//        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
+//        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
+        childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimary);
         childViewHolder.maximaPrice.setBackgroundResource(R.color.colorPrimary);
         childViewHolder.prismaPrice.setBackgroundResource(R.color.colorPrimary);
 
-        int count = 0;
 
-        //selver 1, prisma 2, maxima 3
-
-        List<Double> tempList = new ArrayList<>();
-
-        Double selverP = currentProduct.getSelverPrice();
-
-        if (selverP.equals(0.0)) {
-            selverP = 999.99;
-            count += 1;
-        }
-
-        Double maximaP = currentProduct.getMaximaPrice();
-
-        if (maximaP.equals(0.0)) {
-            maximaP = 999.99;
-            count += 1;
-        }
-
-        Double prismaP = currentProduct.getPrismaPrice();
-
-        if (prismaP.equals(0.0)) {
-            prismaP = 999.99;
-            count += 1;
-        }
-
-        tempList.addAll(Arrays.asList(selverP, maximaP, prismaP));
-
-        Collections.sort(tempList);
-
-        if (count == 2) {
-            childViewHolder.prismaPrice.setVisibility(View.INVISIBLE);
-            childViewHolder.maximaPrice.setVisibility(View.INVISIBLE);
-
-            if (tempList.get(0).equals(prismaP)) {
-                childViewHolder.selverPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-            } else if (tempList.get(0).equals(selverP)) {
-                childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-            } else {
-                childViewHolder.selverPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-            }
-        } else if (count == 1) {
-            childViewHolder.maximaPrice.setVisibility(View.INVISIBLE);
-            if (tempList.get(0).equals(tempList.get(1))) {
-                childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimary);
-                if (tempList.get(0).equals(selverP) && tempList.get(0).equals(maximaP)) {
-                    childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                } else if (tempList.get(0).equals(selverP) && tempList.get(0).equals(prismaP)) {
-                    childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
+        List<TextView> textViews = new ArrayList<>(Arrays.asList(childViewHolder.selverPrice, childViewHolder.prismaPrice, childViewHolder.maximaPrice));
+        List<Shop> shops = currentProduct.getShops();
+        Collections.sort(shops, new Comparator<Shop>() {
+            @Override
+            public int compare(Shop lhs, Shop rhs) {
+                if (Double.compare(lhs.getPrice(), rhs.getPrice()) < 0) {
+                    return -1;
                 } else {
-                    childViewHolder.selverPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                }
-            } else {
-                if (tempList.get(0).equals(selverP)) {
-                    childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    if (tempList.get(1).equals(maximaP)) {
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    }
-                } else if (tempList.get(0).equals(maximaP)) {
-                    childViewHolder.selverPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    if (tempList.get(1).equals(selverP)) {
-                        childViewHolder.prismaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    }
-                } else {
-                    childViewHolder.selverPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    if (tempList.get(1).equals(selverP)) {
-                        childViewHolder.prismaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    }
+                    return 1;
                 }
             }
-        } else {
-            if (!tempList.get(0).equals(tempList.get(1))) {
-                if (tempList.get(0).equals(selverP)) {
-                    childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    if (tempList.get(1).equals(maximaP)) {
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    }
-                } else if (tempList.get(0).equals(maximaP)) {
-                    childViewHolder.selverPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    if (tempList.get(1).equals(selverP)) {
-                        childViewHolder.prismaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    }
-                } else {
-                    childViewHolder.selverPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    if (tempList.get(1).equals(selverP)) {
-                        childViewHolder.prismaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    } else {
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                        childViewHolder.maximaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    }
-                }
-            } else {
-                childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimary);
-                if (tempList.get(0).equals(tempList.get(1)) && tempList.get(0).equals(tempList.get(2))) {
-                    childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                    childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                } else {
-                    if (tempList.get(0).equals(selverP) && tempList.get(0).equals(maximaP)) {
-                        childViewHolder.maximaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    } else if (tempList.get(0).equals(selverP) && tempList.get(0).equals(prismaP)) {
-                        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                    } else {
-                        childViewHolder.maximaPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-                        childViewHolder.selverPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-                        childViewHolder.prismaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-                    }
-                }
+        });
+
+        for (int i = 0; i < textViews.size(); i++) {
+            textViews.get(i).setText(shops.get(i).toString()); // SHOPS LENGTH MUST EQUAL TEXTVIEWS LENGTH
+            textViews.get(i).setVisibility(shops.get(i).getVisibilityValue());
+
+            if (shops.get(i).isOnSale()) {
+                textViews.get(i).setBackgroundResource(R.color.colorPrimaryLight);
             }
         }
-
-
-//        if (!tempList.get(0).equals(tempList.get(1))) {
-//            if (tempList.get(0).equals(prismaP)) {
-//                childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-//            } else if (tempList.get(0).equals(selverP)) {
-//                childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-//            } else {
-//                childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-//            }
-//        }
-
 
     }
 
@@ -233,7 +120,13 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
 
         Product subcategoryChildListItem = (Product) childListItem;
         childViewHolder.productName.setText(subcategoryChildListItem.getName());
-        UrlImageViewHelper.setUrlDrawable(childViewHolder.img, subcategoryChildListItem.getImgURL());
+
+        if (subcategoryChildListItem.getImgURL().equals("0")) {
+            UrlImageViewHelper.setUrlDrawable(childViewHolder.img, "http://www.jordans.com/~/media/jordans%20redesign/no-image-found.ashx?h=275&la=en&w=275&hash=F87BC23F17E37D57E2A0B1CC6E2E3EEE312AAD5B");
+        } else {
+            UrlImageViewHelper.setUrlDrawable(childViewHolder.img, subcategoryChildListItem.getImgURL());
+        }
+
 
 
         childViewHolder.add.setOnClickListener(new View.OnClickListener() {
