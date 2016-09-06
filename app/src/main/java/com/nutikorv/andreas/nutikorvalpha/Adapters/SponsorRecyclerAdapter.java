@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,9 +61,11 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
 
         holder.productOldPrice.setText(onSaleProducts.get(position).getFormatedOldPrice());
 
-        holder.shopName.setText(onSaleProducts.get(position).getShopName());
+//        holder.shopName.setText(onSaleProducts.get(position).getShopName());
+//
+//        holder.shopName.setTextColor(Color.BLUE);
 
-        holder.shopName.setTextColor(Color.BLUE);
+        UrlImageViewHelper.setUrlDrawable(holder.shopName, onSaleProducts.get(position).getShopLogoURL());
 
         holder.saleDuration.setText(onSaleProducts.get(position).getDuration());
 
@@ -81,7 +84,7 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
         protected ImageView productImage;
         protected TextView productOldPrice;
         protected TextView productName;
-        protected TextView shopName;
+        protected ImageView shopName;
         protected TextView saleDuration;
         protected TextView salePercentage;
 
@@ -97,7 +100,7 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
 
             productPrice = (TextView) view.findViewById(R.id.gridPrice);
 
-            shopName = (TextView) view.findViewById(R.id.shopName);
+            shopName = (ImageView) view.findViewById(R.id.shopName);
 
             saleDuration = (TextView) view.findViewById(R.id.saleDuration);
 

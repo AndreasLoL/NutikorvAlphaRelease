@@ -16,11 +16,14 @@ import com.google.gson.Gson;
 import com.nutikorv.andreas.nutikorvalpha.Objects.AsyncResult;
 import com.nutikorv.andreas.nutikorvalpha.Objects.ProductsFromURL;
 import com.nutikorv.andreas.nutikorvalpha.Objects.ReadProducts;
+import com.nutikorv.andreas.nutikorvalpha.Objects.ShopParameters;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -60,6 +63,14 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         final TextView t1 = (TextView) findViewById(R.id.mainText);
         final TextView t2 = (TextView) findViewById(R.id.lowerText);
+
+        GlobalParameters.spList = new ArrayList<>();
+
+        GlobalParameters.spList.add(new ShopParameters("Selver", "http://www.adaur.ee/wp-content/2015/11/selver.jpg", "http://www.tallinn.ee/gal_pildid/103644.png", "#FF0000"));
+
+        GlobalParameters.spList.add(new ShopParameters("Maxima", "http://www.maxima.lt/images/front/logos/maxima_logo.png", "http://www.uzubaliai.lt/image/data/Maxima-logo.jpg", "#0000FF"));
+
+        GlobalParameters.spList.add(new ShopParameters("Prisma", "http://www.fetchlogos.com/wp-content/uploads/2015/12/Prisma-Logo.jpg", "http://logonoid.com/images/prisma-logo.png", "#00FF00"));
 
 //        SharedPreferences preferences = getSharedPreferences(VERSION_CONTROL, 0);
 //        preferences.edit().remove(STORED_VERSION);
@@ -118,7 +129,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                     System.out.println("INNER VERSION " + v[0] + " OUTTER VERSION " + version);
 
-                    if (v[0] > version) {
+                    if (v[0] > version || GlobalParameters.developerMode) {
 
                         t1.setText("TOODETE UUENDUS TUVASTATUD");
                         t2.setText("TOIMUB TOODETE UUENDUS, PALUN OODAKE");

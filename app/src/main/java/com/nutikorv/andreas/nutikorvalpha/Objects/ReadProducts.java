@@ -17,6 +17,8 @@ public class ReadProducts {
 
     private List<MainCategory> categories;
 
+    private List<ShopParameters> spList;
+
     private List<OnSaleProduct> onSaleProducts;
 
     public List<MainCategory> getCategories() {
@@ -33,7 +35,9 @@ public class ReadProducts {
         return a1;
     }
 
-
+    public List<ShopParameters> getSpList() {
+        return spList;
+    }
 
     public ReadProducts() {
 
@@ -41,6 +45,15 @@ public class ReadProducts {
 
         onSaleProducts = new ArrayList<>();
 
+        spList = new ArrayList<>();
+
+        Log.i("---->", "CREATED ShopParameters");
+
+        spList.add(new ShopParameters("Selver", "http://www.adaur.ee/wp-content/2015/11/selver.jpg", "http://www.tallinn.ee/gal_pildid/103644.png", "#FF0000"));
+
+        spList.add(new ShopParameters("Maxima", "http://www.maxima.lt/images/front/logos/maxima_logo.png", "https://upload.wikimedia.org/wikipedia/commons/c/c1/Maxima_logo.svg", "#0000FF"));
+
+        spList.add(new ShopParameters("Prisma", "http://www.fetchlogos.com/wp-content/uploads/2015/12/Prisma-Logo.jpg", "http://logonoid.com/images/prisma-logo.png", "#00FF00"));
 //        categories.add(new MainCategory("Alkohol"));
 //
 //        categories.add(new MainCategory("Piimatooted"));
@@ -93,7 +106,7 @@ public class ReadProducts {
         Product p = new Product(o1.getString("nimi"), o1.getDouble("prisma"), o1.getDouble("selver"), o1.getDouble("maxima"), o1.getString("EAN"), o1.getString("pilt"), "See on toode!", o1.getInt("selverp"), o1.getInt("prismap"), o1.getInt("maximap"));
 
         if (!(o1.getDouble("prismap") == 0.0)) {
-            OnSaleProduct osp = new OnSaleProduct(o1.getString("nimi"), "Prisma", o1.getDouble("prisma"), o1.getDouble("prismap"), o1.getString("prismap_end"), o1.getString("EAN"), o1.getString("pilt"), o1.getString("peakategooria"));
+            OnSaleProduct osp = new OnSaleProduct(o1.getString("nimi"), spList.get(2), o1.getDouble("prisma"), o1.getDouble("prismap"), o1.getString("prismap_end"), o1.getString("EAN"), o1.getString("pilt"), o1.getString("peakategooria"));
             Log.d("------------->", "ON SALE PRODUCT ADDED " + o1.getString("nimi"));
             onSaleProducts.add(osp);
         }

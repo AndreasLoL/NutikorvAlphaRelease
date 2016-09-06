@@ -91,13 +91,7 @@ public class SalesFragment extends Fragment {
 
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
 
-
         r2.setLayoutManager(gridLayoutManager2);
-
-
-
-
-
 
         // Inflate the layout for this fragment
         return rootView;

@@ -65,6 +65,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     private RecyclerView recycler;
     private ProductListAdapter adapterProducts;
     private SubCategoryExpandableRecyclerAdapter adapter1;
+    private TextView basket_preview;
 
 
     @Nullable
@@ -73,6 +74,8 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
         View rootView = inflater.inflate(R.layout.fragment_products_inner, container, false);
 
         recycler = (RecyclerView) rootView.findViewById(R.id.main_recycler);
+
+        basket_preview = (TextView) rootView.findViewById(R.id.basket_preview);
 
 //        String s = getArguments().getString("products", null);
 //
@@ -86,6 +89,8 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
 
         MainCategory m;
+
+        updateBasketPreview();
 
         if (GlobalParameters.selectedCategory == null) {
             m = GlobalParameters.r.getCategories().get(0);
@@ -106,7 +111,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
             }
 
 
-            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1, this);
             adapter1.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
                 @Override
                 public void onListItemExpanded(int position) {
@@ -141,6 +146,12 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
         return rootView;
     }
 
+    public void updateBasketPreview() {
+        Basket b1 = GlobalParameters.b;
+        Log.i("------------>", "update");
+        basket_preview.setText(b1.getBasketName() + " (" + b1.getProductsCount() + " toodet) " + b1.getAllProductsPriceRange());
+    }
+
 
     @Override
     public void onResume() {
@@ -167,7 +178,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
             }
 
 
-            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1);
+            adapter1 = new SubCategoryExpandableRecyclerAdapter(getContext(), l1, this);
 
 
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -227,6 +238,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
             @Override
             public void onClick(View v) {
                 GlobalParameters.b.addToBasket(p2, 1);
+                updateBasketPreview();
                 Toast.makeText(getContext(), "Added to basket!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }

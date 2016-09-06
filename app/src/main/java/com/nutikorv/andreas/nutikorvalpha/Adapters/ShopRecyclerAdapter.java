@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
 /**
@@ -35,24 +36,26 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
 
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "OpenSans-Light.ttf");
 
+        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.spList.get(position).getLinearLogoURL());
+
 //        holder.shopName.setText("  POE NIMI  ");
 
-        holder.shopName.setTypeface(font);
+//        holder.shopName.setTypeface(font);
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return GlobalParameters.spList.size();
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected TextView shopName;
+        protected ImageView shopName;
 
         public CustomViewHolder(View view) {
             super(view);
 
-            shopName = (TextView) view.findViewById(R.id.shop_name);
+            shopName = (ImageView) view.findViewById(R.id.shop_name);
 
 
         }

@@ -74,6 +74,23 @@ public class Basket {
         }
     }
 
+    public String getAllProductsPriceRange() {
+        double minVal = 0;
+        double maxVal = 0;
+        for (Product p: allHashProducts.keySet()) {
+            double[] doubleArray = p.getPriceRangeDouble(allHashProducts.get(p));
+            if (doubleArray.length == 2) {
+                minVal += doubleArray[0];
+                maxVal += doubleArray[1];
+            } else {
+                maxVal += doubleArray[0];
+            }
+        }
+
+
+        return String.format("%.2f", minVal) + "€ - " + String.format("%.2f", maxVal) + "€";
+    }
+
 
     public double getPrismaPrice() {
         double total = 0;
@@ -97,6 +114,15 @@ public class Basket {
             total += (p.getMaximaPrice() * allHashProducts.get(p));
         }
         return total;
+    }
+
+    public int getProductsCount() {
+        int count = 0;
+        for (Product p: allHashProducts.keySet()) {
+            count += allHashProducts.get(p);
+        }
+
+        return count;
     }
 
 

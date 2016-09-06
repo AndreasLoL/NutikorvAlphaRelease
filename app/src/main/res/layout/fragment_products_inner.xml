@@ -41,7 +41,8 @@
                 android:textColor="#fff"
                 android:textSize="15sp"
                 android:ellipsize="end"
-                android:text="Peetri ostukorv (34) 23€ - 25€" />
+                android:text="Peetri ostukorv (34) 23€ - 25€"
+                android:id="@+id/basket_preview" />
         </LinearLayout>
     </FrameLayout>
 

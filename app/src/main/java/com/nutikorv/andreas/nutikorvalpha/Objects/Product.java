@@ -77,9 +77,9 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
         this.imgURL = imgURL;
         this.productDescription = productDescription;
 
-        shops.add(new Shop("Selver", selverPrice, selverSale));
-        shops.add(new Shop("Prisma", prismaPrice, prismaSale));
-        shops.add(new Shop("Maxima", maximaPrice, maximaSale));
+        shops.add(new Shop(GlobalParameters.spList.get(0), selverPrice, selverSale));
+        shops.add(new Shop(GlobalParameters.spList.get(2), prismaPrice, prismaSale));
+        shops.add(new Shop(GlobalParameters.spList.get(1), maximaPrice, maximaSale));
     }
 
     public Product(String category) {
@@ -117,6 +117,28 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
         temp.add(maximaPrice * amount);
         Collections.sort(temp);
         return String.format("%.2f", temp.get(0)) + "€ - " + String.format("%.2f", temp.get(temp.size() - 1)) + "€";
+    }
+
+    public double[] getPriceRangeDouble(int amount) {
+        List<Double> temp = new ArrayList<>();
+
+        if (!(Double.compare(prismaPrice, 0.0) == 0)) {
+            temp.add(prismaPrice * amount);
+        }
+
+        if (!(Double.compare(selverPrice, 0.0) == 0)) {
+            temp.add(selverPrice * amount);
+        }
+
+        if (!(Double.compare(maximaPrice, 0.0) == 0)) {
+            temp.add(maximaPrice * amount);
+        }
+
+        if (temp.size() > 1) {
+            return new double[]{temp.get(0), temp.get(temp.size() - 1)};
+        } else {
+            return new double[]{temp.get(0)};
+        }
     }
 
 }

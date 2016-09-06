@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.nutikorv.andreas.nutikorvalpha.Fragments.InnerMainFragment;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
@@ -44,10 +46,12 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
 
     private static final float INITIAL_POSITION = 0.0f;
     private static final float ROTATED_POSITION = 180f;
+    private InnerMainFragment fragment;
 
-    public SubCategoryExpandableRecyclerAdapter(Context context, List<ParentListItem> itemList) {
+    public SubCategoryExpandableRecyclerAdapter(Context context, List<ParentListItem> itemList, InnerMainFragment fragment) {
         super(itemList);
         mInflater = LayoutInflater.from(context);
+        this.fragment = fragment;
     }
 
     @Override
@@ -139,6 +143,7 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
                     qt = 1;
                 }
                 GlobalParameters.b.addToBasket((Product) childListItem, qt);
+                fragment.updateBasketPreview();
                 InputMethodManager imm = (InputMethodManager) v.getContext()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);

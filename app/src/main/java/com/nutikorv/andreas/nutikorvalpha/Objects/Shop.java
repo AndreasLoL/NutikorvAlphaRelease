@@ -13,7 +13,7 @@ public class Shop {
 
     private double price;
 
-    private String name;
+    private ShopParameters sp;
 
     public boolean isOnSale() {
         return onSale;
@@ -27,8 +27,8 @@ public class Shop {
 
     private int visibilityValue;
 
-    public Shop(String name, Double price, int saleValue) {
-        this.name = name;
+    public Shop(ShopParameters sp, Double price, int saleValue) {
+        this.sp = sp;
 
         if (price.equals(0.0)) {
             this.price = 999.99;
@@ -46,7 +46,7 @@ public class Shop {
     }
 
     public String toString() {
-        return name + ": " + String.format("%.2f", this.price) + "€";
+        return sp.getName() + ": " + String.format("%.2f", this.price) + "€";
     }
 
 }

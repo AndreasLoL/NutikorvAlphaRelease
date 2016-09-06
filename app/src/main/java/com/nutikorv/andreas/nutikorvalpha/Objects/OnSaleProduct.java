@@ -9,8 +9,6 @@ public class OnSaleProduct {
 
     private String name;
 
-    private String shopName;
-
     private Double currentPrice;
 
     private Double oldPrice;
@@ -25,11 +23,13 @@ public class OnSaleProduct {
 
     private String salePercentage;
 
+    private ShopParameters sp;
 
-    public OnSaleProduct(String name, String shopName, Double currentPrice, Double oldPrice, String duration, String EAN, String imgURL, String mainCategory) {
+
+    public OnSaleProduct(String name, ShopParameters sp, Double currentPrice, Double oldPrice, String duration, String EAN, String imgURL, String mainCategory) {
 
         this.name = name;
-        this.shopName = shopName;
+        this.sp = sp;
         this.currentPrice = currentPrice;
 
         if (oldPrice.equals(-1.0)) {
@@ -55,6 +55,10 @@ public class OnSaleProduct {
         return imgURL;
     }
 
+    public String getShopLogoURL() {
+        return sp.getLinearLogoURL();
+    }
+
     public String getEAN() {
         return EAN;
     }
@@ -72,7 +76,7 @@ public class OnSaleProduct {
     }
 
     public String getShopName() {
-        return shopName;
+        return sp.getName();
     }
 
     public String getMainCategory() {

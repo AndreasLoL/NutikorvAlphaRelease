@@ -19,14 +19,12 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="SELLOUT TOOTED"
-            android:id="@+id/textView10"
-            android:background="@drawable/layout_border"/>
+            android:id="@+id/textView10" />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sponsorGridView"
-            android:background="@drawable/layout_border"/>
+            android:id="@+id/sponsorGridView" />
 
         <RelativeLayout
             android:orientation="horizontal"
