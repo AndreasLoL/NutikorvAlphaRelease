@@ -20,6 +20,6 @@ public class GlobalParameters {
 
     public static List<ShopParameters> spList;
 
-    public static boolean developerMode = false;
+    public static boolean developerMode = true;
 
 }

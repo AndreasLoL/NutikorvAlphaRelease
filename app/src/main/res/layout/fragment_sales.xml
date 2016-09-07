@@ -6,7 +6,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity"
     android:weightSum="1"
-    android:isScrollContainer="true">
+    android:isScrollContainer="true"
+    android:background="#FFFF"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:paddingTop="2dp"
+    android:fillViewport="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,13 +23,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="SELLOUT TOOTED"
-            android:id="@+id/textView10" />
+            android:text="Uudistooted"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/textNews" />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sponsorGridView" />
+            android:id="@+id/sponsorGridView"
+            android:layout_marginTop="4dp" />
 
         <RelativeLayout
             android:orientation="horizontal"
@@ -35,8 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="POODIDE JÄRGI"
-                android:id="@+id/textView12"
+                android:text="Allahindlused poodide järgi"
+                android:textColor="@color/colorPrimaryDark"
+                android:id="@+id/textShops"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />
 
@@ -58,15 +66,20 @@
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/shopGridView" />
+                android:id="@+id/shopGridView"
+                android:background="#e5e5e5"
+                android:verticalSpacing="1dp"
+                android:horizontalSpacing="1dp"
+                android:layout_marginTop="4dp" />
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="KATEGOORIATE JÄRGI"
-            android:id="@+id/textView11" />
+            android:text="Allahindlused kategooriate järgi"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/textCategories" />
 
         <com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewScrollable
             android:id="@+id/salesGridView"
@@ -74,12 +87,11 @@
             android:layout_height="75dp"
             android:columnWidth="160dp"
             android:numColumns="2"
-            android:verticalSpacing="6dp"
-            android:horizontalSpacing="6dp"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
             android:stretchMode="columnWidth"
             android:gravity="center"
-            android:layout_marginRight="25dp"
-            android:layout_marginLeft="25dp" />
+            android:layout_marginTop="4dp" />
     </LinearLayout>
 
 </ScrollView>

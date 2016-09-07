@@ -1,6 +1,7 @@
 package com.nutikorv.andreas.nutikorvalpha.Fragments;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewScrollable;
@@ -30,6 +32,12 @@ import java.util.List;
  */
 public class SalesFragment extends Fragment {
 
+    private TextView newsText;
+
+    private TextView shopText;
+
+    private TextView categoriesText;
+
     public SalesFragment() {
         // Required empty public constructor
     }
@@ -45,6 +53,20 @@ public class SalesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sales, container, false);
 
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "OpenSans-Light.ttf");
+
+        newsText = (TextView) rootView.findViewById(R.id.textNews);
+
+        newsText.setTypeface(font);
+
+        shopText = (TextView) rootView.findViewById(R.id.textShops);
+
+        shopText.setTypeface(font);
+
+        categoriesText = (TextView) rootView.findViewById(R.id.textCategories);
+
+        categoriesText.setTypeface(font);
+
         GridViewScrollable g1 = (GridViewScrollable) rootView.findViewById(R.id.salesGridView);
 
         g1.setAdapter(new CategoryGridViewAdapter(getContext()));
@@ -58,12 +80,9 @@ public class SalesFragment extends Fragment {
                 Fragment newFragment = new SaleDisplayFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack
                 transaction.replace(R.id.container_body, newFragment);
                 transaction.addToBackStack(null);
 
-// Commit the transaction
                 transaction.commit();
 
             }

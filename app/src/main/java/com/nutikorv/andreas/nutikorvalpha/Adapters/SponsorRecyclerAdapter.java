@@ -47,9 +47,9 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
 
         holder.productName.setText(onSaleProducts.get(position).getName());
 
-        holder.productName.setTypeface(font2);
+        //holder.productName.setTypeface(font2);
 
-        holder.productPrice.setTypeface(font2);
+        //holder.productPrice.setTypeface(font2);
 
         holder.productPrice.setText(onSaleProducts.get(position).getFormatedCurrentPrice());
 
@@ -57,15 +57,12 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
 
         holder.productOldPrice.setPaintFlags(holder.productOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        holder.productOldPrice.setTypeface(font);
+        //holder.productOldPrice.setTypeface(font);
 
         holder.productOldPrice.setText(onSaleProducts.get(position).getFormatedOldPrice());
 
-//        holder.shopName.setText(onSaleProducts.get(position).getShopName());
-//
-//        holder.shopName.setTextColor(Color.BLUE);
+        holder.shopName.setText(onSaleProducts.get(position).getShopName());
 
-        UrlImageViewHelper.setUrlDrawable(holder.shopName, onSaleProducts.get(position).getShopLogoURL());
 
         holder.saleDuration.setText(onSaleProducts.get(position).getDuration());
 
@@ -84,7 +81,7 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
         protected ImageView productImage;
         protected TextView productOldPrice;
         protected TextView productName;
-        protected ImageView shopName;
+        protected TextView shopName;
         protected TextView saleDuration;
         protected TextView salePercentage;
 
@@ -100,7 +97,7 @@ public class SponsorRecyclerAdapter extends RecyclerView.Adapter<SponsorRecycler
 
             productPrice = (TextView) view.findViewById(R.id.gridPrice);
 
-            shopName = (ImageView) view.findViewById(R.id.shopName);
+            shopName = (TextView) view.findViewById(R.id.shopName);
 
             saleDuration = (TextView) view.findViewById(R.id.saleDuration);
 

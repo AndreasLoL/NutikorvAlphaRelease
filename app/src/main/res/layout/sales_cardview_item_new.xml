@@ -18,21 +18,26 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ecf0f1"
+            android:background="#FEFEFA"
             android:weightSum="1"
             android:elevation="3dp"
             android:id="@+id/layout"
             android:layout_gravity="top"
             android:layout_alignParentStart="true">
 
-            <ImageView
+            <TextView
                 android:layout_width="110dp"
-                android:layout_height="30dp"
-                android:id="@+id/shopName" />
+                android:layout_height="wrap_content"
+                android:id="@+id/shopName"
+                android:text="SELVER"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAllCaps="true"
+                android:textSize="20sp"
+                android:layout_marginLeft="3dp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="KUNI 29.09"
                 android:textSize="12sp"
@@ -45,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="TOOTE NIMI LUUUL"
             android:id="@+id/gridName"
             android:layout_below="@+id/layout"
@@ -55,7 +60,8 @@
             android:maxLines="2"
             android:minLines="1"
             android:lines="2"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:layout_marginLeft="2dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -69,10 +75,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="53.99€"
                 android:id="@+id/gridPrice"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:layout_marginLeft="2dp" />
 
             <TextView
                 android:layout_width="match_parent"

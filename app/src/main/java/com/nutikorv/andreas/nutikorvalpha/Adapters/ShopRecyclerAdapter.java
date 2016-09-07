@@ -36,7 +36,11 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
 
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "OpenSans-Light.ttf");
 
-        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.spList.get(position).getLinearLogoURL());
+//        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.spList.get(position).getLinearLogoURL());
+
+        System.out.println("SIZE " + GlobalParameters.r.getSpList().size());
+
+        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.r.getSpList().get(position).getLinearLogoURL());
 
 //        holder.shopName.setText("  POE NIMI  ");
 
@@ -46,7 +50,7 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return GlobalParameters.spList.size();
+        return GlobalParameters.r.getSpList().size();
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +60,6 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
             super(view);
 
             shopName = (ImageView) view.findViewById(R.id.shop_name);
-
 
         }
     }

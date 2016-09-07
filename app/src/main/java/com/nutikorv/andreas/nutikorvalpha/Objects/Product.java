@@ -67,7 +67,7 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
     private List<Shop> shops = new ArrayList<>();
 
 
-    public Product(String name, double prismaPrice, double selverPrice, double maximaPrice, String EAN, String imgURL, String productDescription, int selverSale, int prismaSale, int maximaSale) {
+    public Product(String name, double prismaPrice, double selverPrice, double maximaPrice, String EAN, String imgURL, String productDescription, int selverSale, int prismaSale, int maximaSale, List<ShopParameters> shopsParameters) {
         super(1001);
         this.name = name;
         this.prismaPrice = prismaPrice;
@@ -77,9 +77,10 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
         this.imgURL = imgURL;
         this.productDescription = productDescription;
 
-        shops.add(new Shop(GlobalParameters.spList.get(0), selverPrice, selverSale));
-        shops.add(new Shop(GlobalParameters.spList.get(2), prismaPrice, prismaSale));
-        shops.add(new Shop(GlobalParameters.spList.get(1), maximaPrice, maximaSale));
+
+        shops.add(new Shop(shopsParameters.get(0), selverPrice, selverSale));
+        shops.add(new Shop(shopsParameters.get(2), prismaPrice, prismaSale));
+        shops.add(new Shop(shopsParameters.get(1), maximaPrice, maximaSale));
     }
 
     public Product(String category) {
