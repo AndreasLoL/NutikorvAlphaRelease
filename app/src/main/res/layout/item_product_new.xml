@@ -89,15 +89,13 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal">
 
-
-
                 <TextView
                     android:id="@+id/selverPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxHeight="25dp"
                     android:minHeight="25dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorPrimaryDark"
                     android:padding="4dp"
                     android:maxWidth="80dp"
                     android:minWidth="80dp"
@@ -118,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:maxHeight="25dp"
                     android:minHeight="25dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorPrimaryDark"
                     android:padding="4dp"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal|bottom"
@@ -135,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:maxHeight="25dp"
                     android:minHeight="25dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorPrimaryDark"
                     android:padding="4dp"
                     android:maxWidth="80dp"
                     android:minWidth="80dp"

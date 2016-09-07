@@ -88,9 +88,9 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
 //        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
 //        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
 //        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
-        childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimary);
-        childViewHolder.maximaPrice.setBackgroundResource(R.color.colorPrimary);
-        childViewHolder.prismaPrice.setBackgroundResource(R.color.colorPrimary);
+        childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimaryDark);
+        childViewHolder.maximaPrice.setBackgroundResource(R.color.colorPrimaryDark);
+        childViewHolder.prismaPrice.setBackgroundResource(R.color.colorPrimaryDark);
 
 
         List<TextView> textViews = new ArrayList<>(Arrays.asList(childViewHolder.selverPrice, childViewHolder.prismaPrice, childViewHolder.maximaPrice));

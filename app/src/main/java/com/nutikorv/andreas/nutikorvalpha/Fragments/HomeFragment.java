@@ -4,6 +4,7 @@ package com.nutikorv.andreas.nutikorvalpha.Fragments;
  * Created by ANDREAS on 12.07.2016.
  */
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -59,6 +60,8 @@ public class HomeFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Tooted"));
         tabLayout.addTab(tabLayout.newTab().setText("Ostukorv"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabTextColors(getResources().getColor(R.color.textColorPrimary), getResources().getColor(R.color.selectedTab));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.selectedTab));
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

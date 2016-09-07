@@ -14,7 +14,7 @@
         android:singleLine="true"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:background="#2c3e50"
+        android:background="@color/colorPrimaryDark"
         android:textColor="#ecf0f1" />
 
     <ListView
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="#2c3e50"
+        android:background="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
         android:id="@+id/frame">
 

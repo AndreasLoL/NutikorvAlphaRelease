@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="#FFF">
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridView"
@@ -10,8 +11,10 @@
         android:gravity="center"
         android:columnWidth="100dp"
         android:layout_width="fill_parent"
-        android:verticalSpacing="3dp"
-        android:horizontalSpacing="3dp"
+        android:background="#e5e5e5"
+        android:horizontalSpacing="1dp"
         android:stretchMode="columnWidth"
-        android:layout_height="fill_parent"  />
+        android:layout_height="wrap_content"
+        android:verticalSpacing="1dp"
+        android:layout_gravity="top" />
 </LinearLayout>

@@ -12,11 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
+        android:background="#FF00"
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        android:theme="@style/MyCustomTheme"
+        app:popupTheme="@style/MyCustomTheme"
+        app:theme="@style/MyCustomTheme"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -26,7 +27,7 @@
         android:background="?attr/colorPrimary"
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        style="@style/CustomTabLayoutStyle" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
