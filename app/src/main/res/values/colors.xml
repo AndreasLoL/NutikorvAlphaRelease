@@ -11,5 +11,8 @@
     <color name="medium">#ffcc00</color>
     <color name="expensive">#ff3300</color>
     <color name="selectedTab">#8e44ad</color>
+    <color name="selected_comment_background">#FFF</color>
+    <color name="comment_background">#FFF</color>
+
 
 </resources>
