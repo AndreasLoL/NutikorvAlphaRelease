@@ -15,15 +15,28 @@ import java.util.List;
 
 public class Basket {
 
+    private List<Product> allProducts;
+
+    private LinkedHashMap<Product, Integer> allHashProducts;
+
+    private String basketName;
+
+
+    public Basket(String basketName) {
+        this.basketName = basketName;
+        this.allHashProducts = new LinkedHashMap<>();
+        this.allProducts = new ArrayList<>();
+    }
+
+
+
     public LinkedHashMap<Product, Integer> getAllProducts() {
         return allHashProducts;
     }
 
     public List<Product> getAllHashKeys() {
-        return new ArrayList<Product>(getAllProducts().keySet());
+        return allProducts;
     }
-
-
 
     public Product[] getAllProductsArray() {
         Product[] temp = new Product[allProducts.size()];
@@ -33,8 +46,6 @@ public class Basket {
 
         return temp;
     }
-
-
 
     public void removeProduct(Product p) {
         allHashProducts.remove(p);
@@ -52,21 +63,12 @@ public class Basket {
         this.basketName = basketName;
     }
 
-    private List<Product> allProducts = new ArrayList<>();
-
-    private LinkedHashMap<Product, Integer> allHashProducts = new LinkedHashMap<>();
-
-    private String basketName;
-
-    public Basket(String basketName) {
-        this.basketName = basketName;
-    }
-
 //    public void addToBasket(Product p) {
 //        allProducts.add(p);
 //    }
 
     public void addToBasket(Product p, int quantity) {
+        allProducts.add(p);
         if (allHashProducts.containsKey(p)) {
             allHashProducts.put(p, allHashProducts.get(p) + quantity);
         } else {
@@ -124,6 +126,4 @@ public class Basket {
 
         return count;
     }
-
-
 }

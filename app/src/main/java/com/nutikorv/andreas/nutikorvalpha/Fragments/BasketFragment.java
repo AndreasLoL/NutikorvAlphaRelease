@@ -4,27 +4,23 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.BasketListView;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.BasketRecyclerAdapter;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.ShopRecyclerAdapter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
+import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
@@ -39,8 +35,6 @@ import java.util.List;
 public class BasketFragment extends Fragment {
 
     private Button addBasket;
-
-//    private BasketRecyclerAdapter a1;
 
     private SimpleAdapter a1;
 
@@ -82,16 +76,8 @@ public class BasketFragment extends Fragment {
 
 
         r1.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        a1 = new BasketRecyclerAdapter(getContext(), baskets, r1);
-//
-//        r1.setAdapter(a1);
 
-//        a1 = new BasketListView(getContext(), baskets, r1);
-//
-//        r1.setAdapter(a1);
-
-        a1 = new SimpleAdapter(r1, baskets);
+        a1 = new SimpleAdapter(r1, baskets, this);
 
         r1.setAdapter(a1);
 
@@ -157,10 +143,12 @@ public class BasketFragment extends Fragment {
         private RecyclerView recyclerView;
         private int selectedItem = UNSELECTED;
         private List<Basket> baskets;
+        private BasketFragment f;
 
-        public SimpleAdapter(RecyclerView recyclerView, List<Basket> baskets) {
+        public SimpleAdapter(RecyclerView recyclerView, List<Basket> baskets, BasketFragment f) {
             this.recyclerView = recyclerView;
             this.baskets = baskets;
+            this.f = f;
         }
 
         @Override
@@ -190,6 +178,7 @@ public class BasketFragment extends Fragment {
             protected ExpandableLayout expandedLayout;
             protected TextView productAmount;
             protected TextView productPriceRange;
+            protected Button callProductsFragment;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -199,16 +188,17 @@ public class BasketFragment extends Fragment {
                 expandedLayout = (ExpandableLayout) itemView.findViewById(R.id.expandedLayout);
                 productAmount = (TextView) itemView.findViewById(R.id.productAmountText);
                 productPriceRange = (TextView) itemView.findViewById(R.id.priceRangeText);
+                callProductsFragment = (Button) itemView.findViewById(R.id.callFragmentButton);
 
                 itemView.setOnClickListener(this);
 
 //                expandButton.setOnClickListener(this);
             }
 
-            public void bind(int position) {
+            public void bind(final int position) {
                 this.position = position;
 
-                String basketID = baskets.get(position).getBasketName();
+                final String basketID = baskets.get(position).getBasketName();
 
                 basketName.setText(basketID);
 
@@ -224,6 +214,23 @@ public class BasketFragment extends Fragment {
 
                 productAmount.setText(baskets.get(position).getProductsCount() + " TOODET");
                 productPriceRange.setText(baskets.get(position).getAllProductsPriceRange());
+
+                callProductsFragment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+
+                        Fragment newFragment = new InstancedProductDisplayFragment().newInstance(gson.toJson(gson.toJson(baskets.get(position))));
+                        FragmentTransaction transaction = f.getFragmentManager().beginTransaction();
+
+                        transaction.replace(R.id.container_body, newFragment);
+                        transaction.addToBackStack(null);
+
+                        transaction.commit();
+                    }
+                });
+
+
 
 
             }

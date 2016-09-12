@@ -91,6 +91,4 @@ public class InnerCategoryFragment extends Fragment {
         super.onDetach();
     }
 
-
-
 }
