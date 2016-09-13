@@ -159,6 +159,8 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         MainCategory m;
 
+        updateBasketPreview();
+
 
         if (GlobalParameters.selectedCategory == null) {
             m = GlobalParameters.r.getCategories().get(0);
