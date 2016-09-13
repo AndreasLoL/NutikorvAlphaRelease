@@ -7,9 +7,15 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -24,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -45,6 +53,20 @@ public class LoadingActivity extends AppCompatActivity {
 
     private boolean isActivityDestroyed = false;
 
+    private ViewPager viewPager;
+
+    private int[] layouts;
+
+    private MyViewPagerAdapter myViewPagerAdapter;
+
+    private int currentPage = 0;
+
+    private Handler handler;
+
+    private Runnable update;
+
+    private Boolean stillRunning = true;
+
 
     @Override
     public void onDestroy () {
@@ -62,7 +84,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         final TextView t1 = (TextView) findViewById(R.id.mainText);
-        final TextView t2 = (TextView) findViewById(R.id.lowerText);
+//        final TextView t2 = (TextView) findViewById(R.id.lowerText);
 
         GlobalParameters.spList = new ArrayList<>();
 
@@ -76,6 +98,42 @@ public class LoadingActivity extends AppCompatActivity {
 //        preferences.edit().remove(STORED_VERSION);
 //        preferences.edit().remove(ALL_PRODUCTS).commit();
 
+        viewPager = (ViewPager) findViewById(R.id.viewPagerIntro);
+
+        layouts = new int[]{
+                R.layout.intro_layout_1,
+                R.layout.intro_layout_2};
+
+
+        myViewPagerAdapter = new MyViewPagerAdapter();
+        viewPager.setAdapter(myViewPagerAdapter);
+        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+        handler = new Handler();
+
+        update = new Runnable() {
+            public void run() {
+                if (stillRunning) {
+                    if (currentPage == layouts.length) {
+                        currentPage = 0;
+                    }
+                    System.out.println("SWITCH");
+                    viewPager.setCurrentItem(currentPage++, true);
+                }
+
+            }
+        };
+
+
+        new Timer().schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                handler.post(update);
+            }
+        }, 400, 2000);
+
+
         final SharedPreferences s = getSharedPreferences(VERSION_CONTROL, 0);
 
         final int version = s.getInt(STORED_VERSION, 1);
@@ -83,7 +141,7 @@ public class LoadingActivity extends AppCompatActivity {
         final Gson g = new Gson();
 
         if (!isOnline()) {
-            attemptConnectionless(s, t1, t2);
+            attemptConnectionless(s, t1, t1);
             return;
         }
 
@@ -98,7 +156,7 @@ public class LoadingActivity extends AppCompatActivity {
                         if(!isActivityDestroyed){
                             System.out.println("V IS " + v[0]);
                             if (v[0] == -1) {
-                                attemptConnectionless(s, t1, t2);
+                                attemptConnectionless(s, t1, t1);
                                 p1.cancel(true);
                             } else {
                                 System.out.println("GOT VERSION, NOT GOING OFFLINE!");
@@ -132,12 +190,13 @@ public class LoadingActivity extends AppCompatActivity {
                     if (v[0] > version || GlobalParameters.developerMode) {
 
                         t1.setText("TOODETE UUENDUS TUVASTATUD");
-                        t2.setText("TOIMUB TOODETE UUENDUS, PALUN OODAKE");
+//                        t2.setText("TOIMUB TOODETE UUENDUS, PALUN OODAKE");
 
                         if (Build.VERSION.SDK_INT < 19) {
-                            LoadProducts(t1, t2);
+                            LoadProducts(t1, t1);
                         } else {
-                            loadProductsJSON(t1, t2);
+//                            loadProductsJSON(t1, t2);
+                            LoadProducts(t1, t1);
                         }
 
 
@@ -152,7 +211,7 @@ public class LoadingActivity extends AppCompatActivity {
                     } else {
                         System.out.println("SAME VERSION, NO CHANGE!");
                         t1.setText("SAMA VERSIOON");
-                        t2.setText("TOODETE LAADIMINE MÄLUST");
+//                        t2.setText("TOODETE LAADIMINE MÄLUST");
 
                         String str = s.getString(ALL_PRODUCTS, g.toJson(new ReadProducts()));
 
@@ -162,7 +221,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    attemptConnectionless(s, t1, t2);
+                    attemptConnectionless(s, t1, t1);
                 }
             }
         };
@@ -222,6 +281,30 @@ public class LoadingActivity extends AppCompatActivity {
 
     }
 
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+
+            // changing the next button text 'NEXT' / 'GOT IT'
+            if (position == layouts.length - 1) {
+                // last page. make button text to GOT IT
+            } else {
+                // still pages are left
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
     private void attemptConnectionless(SharedPreferences s, TextView upperText, TextView lowerText) {
 
         System.out.println("GOING OFFLINE");
@@ -252,6 +335,8 @@ public class LoadingActivity extends AppCompatActivity {
         Intent goToMainActivity = new Intent(LoadingActivity.this, MainActivity.class);
         goToMainActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(goToMainActivity);
+        handler.removeCallbacks(update);
+        stillRunning = false;
         finish();
     }
 
@@ -390,5 +475,40 @@ public class LoadingActivity extends AppCompatActivity {
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+
+    public class MyViewPagerAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+
+        public MyViewPagerAdapter() {
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View view = layoutInflater.inflate(layouts[position], container, false);
+            container.addView(view);
+
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return layouts.length;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
     }
 }

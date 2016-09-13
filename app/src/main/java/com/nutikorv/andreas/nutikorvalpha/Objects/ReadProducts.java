@@ -105,6 +105,7 @@ public class ReadProducts {
     }
 
     public void loadProductsFromJSON(JSONObject o1) throws JSONException {
+        //SDK >18
         Product p = new Product(o1.getString("nimi"), o1.getDouble("prisma"), o1.getDouble("selver"), o1.getDouble("maxima"), o1.getString("EAN"), o1.getString("pilt"), "See on toode!", o1.getInt("selverp"), o1.getInt("prismap"), o1.getInt("maximap"), spList);
 
         if (!(o1.getDouble("prismap") == 0.0)) {
@@ -113,28 +114,6 @@ public class ReadProducts {
             onSaleProducts.add(osp);
         }
 
-
-//        for (MainCategory c : categories) {
-//            if (c.getName().equals(o1.getString("peakategooria"))) {
-//                if (c.getSubCategories().size() == 0) {
-//                    SubCategory s1 = new SubCategory(o1.getString("alamkategooria"));
-//                    s1.addProduct(p);
-//                    c.addSubCategory(s1);
-//                } else {
-//                    if (c.getSubCategoriesString().contains(o1.getString("alamkategooria"))) {
-//                        for (SubCategory s : c.getSubCategories()) {
-//                            if (s.getName().equals(o1.getString("alamkategooria"))) {
-//                                s.addProduct(p);
-//                            }
-//                        }
-//                    } else {
-//                        SubCategory s1 = new SubCategory(o1.getString("alamkategooria"));
-//                        s1.addProduct(p);
-//                        c.addSubCategory(s1);
-//                    }
-//                }
-//            }
-//        }
 
         if (categories.size() != 0 && getCategoriesString().contains(o1.getString("peakategooria"))) {
             for (MainCategory m: categories) {
@@ -171,100 +150,59 @@ public class ReadProducts {
 
 
     public void loadProducstFromArary(String[] params) {
-
-        //todo: add onSale
+        //SDK18<
+        System.out.println(Arrays.toString(params));
 
         String name = params[3].split(": ")[1];
-        Double selverPrice = 0.0;
-        if (!params[6].split(": ")[1].equals("puudub")) {
-            selverPrice = Double.parseDouble(params[6].split(": ")[1]);
-        }
-        Double maximaPrice = 0.0;
-        if (!params[10].split(": ")[1].equals("puudub")) {
-            maximaPrice = Double.parseDouble(params[10].split(": ")[1]);
-        }
-        Double prismaPrice = 0.0;
-        if (!params[8].split(": ")[1].equals("puudub")) {
-            prismaPrice = Double.parseDouble(params[8].split(": ")[1]);
-        }
-
-
-        String EAN = params[4].split(": ")[1];
+        Double selverPrice = Double.parseDouble(params[6].split(": ")[1]);
+        Double maximaPrice = Double.parseDouble(params[12].split(": ")[1]);
+        System.out.println("MAXIMA PRICE: " + maximaPrice);
+        Double prismaPrice = Double.parseDouble(params[9].split(": ")[1]);
+        String EAN = params[5].split(": ")[1];
         String URL = params[2].split(": ")[1];
         String description = "Toote kirjeldus puudub, miks?";
+        String mainCat = params[0].split(": ")[1];
+        String subCat = params[1].split(": ")[1];
 
 
-        Product temp = new Product(name, prismaPrice, selverPrice, maximaPrice, EAN, URL, description, 0, 0, 0, spList);
+        if (!(Double.parseDouble(params[10].split(": ")[1]) == 0.0)) {
+            OnSaleProduct osp = new OnSaleProduct(name, spList.get(2), prismaPrice, Double.parseDouble(params[10].split(": ")[1]), params[11].split(": ")[1], EAN, URL, mainCat);
+            Log.d("------------->", "ON SALE PRODUCT ADDED " + name);
+            onSaleProducts.add(osp);
+        }
+
+        Product p = new Product(name, prismaPrice, selverPrice, maximaPrice, EAN, URL, description, 0, 0, 0, spList);
 
 
-        String innerCategory = params[1].split(": ")[1];
-
-        for (MainCategory c : categories) {
-            if (c.getName().equals(params[0].split(": ")[1])) {
-                if (c.getSubCategories().size() == 0) {
-                    SubCategory s1 = new SubCategory(innerCategory);
-                    s1.addProduct(temp);
-                    c.addSubCategory(s1);
-                } else {
-                    if (c.getSubCategoriesString().contains(innerCategory)) {
-                        for (SubCategory s : c.getSubCategories()) {
-                            if (s.getName().equals(innerCategory)) {
-                                s.addProduct(temp);
-                            }
-                        }
+        if (categories.size() != 0 && getCategoriesString().contains(mainCat)) {
+            for (MainCategory m : categories) {
+                if (m.getName().equals(mainCat)) {
+                    if (m.getSubCategories().size() == 0) {
+                        SubCategory s1 = new SubCategory(subCat);
+                        s1.addProduct(p);
+                        m.addSubCategory(s1);
                     } else {
-                        SubCategory s1 = new SubCategory(innerCategory);
-                        s1.addProduct(temp);
-                        c.addSubCategory(s1);
+                        if (m.getSubCategoriesString().contains(subCat)) {
+                            for (SubCategory s : m.getSubCategories()) {
+                                if (s.getName().equals(subCat)) {
+                                    s.addProduct(p);
+                                }
+                            }
+                        } else {
+                            SubCategory s1 = new SubCategory(subCat);
+                            s1.addProduct(p);
+                            m.addSubCategory(s1);
+                        }
                     }
                 }
             }
+
+        } else {
+            MainCategory m1 = new MainCategory(mainCat);
+            SubCategory s1 = new SubCategory(subCat);
+            s1.addProduct(p);
+            m1.addSubCategory(s1);
+            categories.add(m1);
         }
-//
-//        productsList.add(temp);
-
-
-
-//        List<Product> temp1 = foodCollection.get(params[0].split(": ")[1]);
-//
-//        if (temp1 == null) {
-//            temp1 = new ArrayList<>();
-//        }
-//        temp1.add(temp);
-//
-//        foodCollection.put(params[0].split(": ")[1], temp1);
     }
-
-//    private void loadProduct(String line) throws JSONException {
-//        JSONObject obj = new JSONObject(line);
-//        if (line == null || line.trim().length() == 0) {
-//            return;
-//        }
-//        System.out.println("PRODUCT NAME: " + obj.getString("product"));
-//
-//        Product temp = new Product(obj.getString("product"), Double.parseDouble(obj.getString("shop1price").replace(",", ".")),
-//                Double.parseDouble(obj.getString("shop2price").replace(",", ".")), Double.parseDouble(obj.getString("shop3price").replace(",", ".")),
-//                obj.getString("EAN"), obj.getString("iconURL"), obj.getString("description"));
-//
-//        productsList.add(temp);
-//
-//
-////        if (!groupList.contains(obj.getString("category"))) {
-////            groupList.add(obj.getString("category"));
-////        }
-//
-//
-//
-//        List<Product> temp1 = foodCollection.get(obj.getString("category"));
-//
-//        if (temp1 == null) {
-//            temp1 = new ArrayList<>();
-//        }
-//        temp1.add(temp);
-//
-//        foodCollection.put(obj.getString("category"), temp1);
-//
-//
-//    }
-
 }
