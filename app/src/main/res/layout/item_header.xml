@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
-        android:src="@drawable/abc_ic_go_search_api_material"
+        android:src="@drawable/ic_arrow"
         android:layout_marginTop="5dp" />
 
     <TextView android:id="@+id/item_header_name"

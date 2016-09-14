@@ -68,7 +68,9 @@ public class Basket {
 //    }
 
     public void addToBasket(Product p, int quantity) {
-        allProducts.add(p);
+        if (!allProducts.contains(p)) {
+            allProducts.add(p);
+        }
         if (allHashProducts.containsKey(p)) {
             allHashProducts.put(p, allHashProducts.get(p) + quantity);
         } else {
