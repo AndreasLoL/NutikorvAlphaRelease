@@ -126,8 +126,8 @@ public class InnerBasketFragment extends Fragment {
             childViewHolder.maximaPiecePrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
             childViewHolder.prismaPiecePrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
             childViewHolder.selverPiecePrice.setBackgroundResource(R.color.cheap);
-            childViewHolder.maximaPiecePrice.setBackgroundResource(R.color.colorPrimary);
-            childViewHolder.prismaPiecePrice.setBackgroundResource(R.color.colorPrimary);
+            childViewHolder.maximaPiecePrice.setBackgroundResource(R.color.colorPrimaryLight);
+            childViewHolder.prismaPiecePrice.setBackgroundResource(R.color.colorPrimaryLight);
 
             int count = 0;
 

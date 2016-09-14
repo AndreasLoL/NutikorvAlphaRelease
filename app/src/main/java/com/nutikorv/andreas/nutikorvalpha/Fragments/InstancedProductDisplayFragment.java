@@ -12,19 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
+import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -105,7 +111,7 @@ public class InstancedProductDisplayFragment extends Fragment {
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_product, null);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.basket_cardview_item, null);
 
             CustomViewHolder viewHolder = new CustomViewHolder(view);
             return viewHolder;
@@ -113,8 +119,51 @@ public class InstancedProductDisplayFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CustomViewHolder customViewHolder, int position) {
-             customViewHolder.textView.setText(products.get(position).getName());
+            Product p = products.get(position);
+
+            setPriceColors(p, customViewHolder);
+
+            customViewHolder.title.setText(p.getName());
+
+            if (p.getImgURL().equals("0")) {
+                UrlImageViewHelper.setUrlDrawable(customViewHolder.thumbnail, "http://www.jordans.com/~/media/jordans%20redesign/no-image-found.ashx?h=275&la=en&w=275&hash=F87BC23F17E37D57E2A0B1CC6E2E3EEE312AAD5B");
+            } else {
+                UrlImageViewHelper.setUrlDrawable(customViewHolder.thumbnail, p.getImgURL());
+            }
         }
+
+        @SuppressWarnings("ResourceType")
+        private void setPriceColors(Product currentProduct, CustomViewHolder childViewHolder) {
+            childViewHolder.selverPiecePrice.setBackgroundResource(R.color.colorPrimaryDark);
+            childViewHolder.maximaPiecePrice.setBackgroundResource(R.color.colorPrimaryDark);
+            childViewHolder.prismaPiecePrice.setBackgroundResource(R.color.colorPrimaryDark);
+
+
+            List<TextView> textViews = new ArrayList<>(Arrays.asList(
+                    childViewHolder.selverPiecePrice, childViewHolder.prismaPiecePrice, childViewHolder.maximaPiecePrice));
+            List<Shop> shops = currentProduct.getShops();
+            Collections.sort(shops, new Comparator<Shop>() {
+                @Override
+                public int compare(Shop lhs, Shop rhs) {
+                    if (Double.compare(lhs.getPrice(), rhs.getPrice()) < 0) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+
+            for (int i = 0; i < textViews.size(); i++) {
+                textViews.get(i).setText(shops.get(i).toString()); // SHOPS LENGTH MUST EQUAL TEXTVIEWS LENGTH
+                textViews.get(i).setVisibility(shops.get(i).getVisibilityValue());
+
+                if (shops.get(i).isOnSale()) {
+                    textViews.get(i).setBackgroundResource(R.color.colorPrimaryLight);
+                }
+            }
+
+        }
+
 
         @Override
         public int getItemCount() {
@@ -122,11 +171,26 @@ public class InstancedProductDisplayFragment extends Fragment {
         }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected TextView textView;
+        private ImageView thumbnail;
+        private TextView title;
+        private TextView price;
+        private ImageButton button;
+        private TextView quantity;
+        private TextView selverPiecePrice;
+        private TextView prismaPiecePrice;
+        private TextView maximaPiecePrice;
 
         public CustomViewHolder(View view) {
             super(view);
-            this.textView = (TextView) view.findViewById(R.id.item_name);
+            this.thumbnail = (ImageView) view.findViewById(R.id.productImage);
+            this.thumbnail.setAnimation(null);
+            this.title = (TextView) view.findViewById(R.id.productName);
+            this.button = (ImageButton) view.findViewById(R.id.deleteProduct);
+            this.price = (TextView) view.findViewById(R.id.totalPrice);
+            this.quantity = (TextView) view.findViewById(R.id.quantity);
+            this.maximaPiecePrice = (TextView) view.findViewById(R.id.maximaPrice);
+            this.selverPiecePrice = (TextView) view.findViewById(R.id.selverPrice);
+            this.prismaPiecePrice = (TextView) view.findViewById(R.id.prismaPrice);
         }
     }
     }

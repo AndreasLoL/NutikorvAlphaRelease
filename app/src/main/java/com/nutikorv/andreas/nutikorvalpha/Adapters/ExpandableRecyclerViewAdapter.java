@@ -16,12 +16,9 @@ import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -141,7 +138,7 @@ public class ExpandableRecyclerViewAdapter extends ExpandableRecyclerAdapter<Exp
 
             prismaPrice = (TextView) view.findViewById(R.id.prismaPrice);
 
-            img = (ImageView) view.findViewById(R.id.item_image);
+            img = (ImageView) view.findViewById(R.id.productImage);
 
             add = (Button) view.findViewById(R.id.addButton);
 
