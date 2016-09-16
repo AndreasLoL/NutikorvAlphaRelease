@@ -9,7 +9,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="MINU OSTUKORV"
         android:elevation="6dp"
-        android:id="@+id/textView"
+        android:id="@+id/basketViewName"
         android:gravity="center"
         android:singleLine="true"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         android:layout_height="386dp"
         android:id="@+id/basketView"
         android:layout_above="@+id/frame"
-        android:layout_below="@+id/textView" />
+        android:layout_below="@+id/basketViewName" />
 
     <FrameLayout
         android:orientation="horizontal"

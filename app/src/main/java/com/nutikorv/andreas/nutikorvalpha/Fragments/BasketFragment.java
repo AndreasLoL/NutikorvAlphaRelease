@@ -2,6 +2,8 @@ package com.nutikorv.andreas.nutikorvalpha.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +22,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
+import com.nutikorv.andreas.nutikorvalpha.Objects.BasketStorage;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
@@ -36,7 +39,16 @@ public class BasketFragment extends Fragment {
 
     private Button addBasket;
 
+    private SharedPreferences sharedPref = this.getActivity().getSharedPreferences("basketHandler", Context.MODE_PRIVATE);
+    private SharedPreferences.Editor editor = sharedPref.edit();
+
     private SimpleAdapter a1;
+
+    private BasketStorage basketStorage;
+
+    private Gson gson = new Gson();
+
+    private List<Basket> baskets;
 
     public BasketFragment() {
         // Required empty public constructor
@@ -55,23 +67,34 @@ public class BasketFragment extends Fragment {
 
         RecyclerView r1 = (RecyclerView) rootView.findViewById(R.id.basketRecyclerView);
 
-        final List<Basket> baskets = new ArrayList<>();
 
-        Basket b1 = GlobalParameters.b;
 
-//
-        baskets.add(b1);
-        baskets.add(new Basket("Test item 1"));
-        baskets.add(new Basket("Test item 2"));
-        baskets.add(new Basket("Test item 3"));
-        baskets.add(new Basket("Test item 4"));
-        baskets.add(new Basket("Test item 5"));
-        baskets.add(new Basket("Test item 6"));
-        baskets.add(new Basket("Test item 7"));
-        baskets.add(new Basket("Test item 8"));
-//        baskets.add(new Basket("Test basket 7"));
-//        baskets.add(new Basket("Test basket 8"));
-//        baskets.add(new Basket("Test basket 9"));
+        if (sharedPref.getString("baskets", null) == null) {
+            basketStorage = new BasketStorage();
+            baskets = new ArrayList<>();
+            Basket b1 = GlobalParameters.b;
+            baskets.add(b1);
+            baskets.add(new Basket("Test item 1"));
+            baskets.add(new Basket("Test item 2"));
+            baskets.add(new Basket("Test item 3"));
+            baskets.add(new Basket("Test item 4"));
+            baskets.add(new Basket("Test item 5"));
+            baskets.add(new Basket("Test item 6"));
+            basketStorage.setBaskets(baskets);
+            updatePreferences();
+            System.out.println("CASE1");
+
+        } else {
+            basketStorage = gson.fromJson(sharedPref.getString("baskets", null), BasketStorage.class);
+            baskets = basketStorage.getBaskets();
+            System.out.println("CASE2");
+        }
+
+
+
+
+        editor.putString("baskets", gson.toJson(basketStorage));
+
 
 
 
@@ -80,11 +103,6 @@ public class BasketFragment extends Fragment {
         a1 = new SimpleAdapter(r1, baskets, this);
 
         r1.setAdapter(a1);
-
-
-
-
-
 
         addBasket = (Button) rootView.findViewById(R.id.addBasket);
 
@@ -122,9 +140,12 @@ public class BasketFragment extends Fragment {
 
 
 
-
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    private void updatePreferences() {
+        editor.putString("baskets", gson.toJson(basketStorage));
     }
 
     @Override

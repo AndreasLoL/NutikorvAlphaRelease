@@ -113,11 +113,23 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
     public String getPriceRange(int amount) {
         List<Double> temp = new ArrayList<>();
 
-        temp.add(prismaPrice * amount);
-        temp.add(selverPrice * amount);
-        temp.add(maximaPrice * amount);
+        if (prismaPrice != 0.0) {
+            temp.add(prismaPrice * amount);
+        }
+        if (selverPrice != 0.0) {
+            temp.add(selverPrice * amount);
+        }
+
+        if (maximaPrice != 0.0) {
+            temp.add(maximaPrice * amount);
+        }
         Collections.sort(temp);
-        return String.format("%.2f", temp.get(0)) + "€ - " + String.format("%.2f", temp.get(temp.size() - 1)) + "€";
+
+        if (temp.size() > 1) {
+            return String.format("%.2f", temp.get(0)) + "€ - " + String.format("%.2f", temp.get(temp.size() - 1)) + "€";
+        }
+        return String.format("%.2f", temp.get(0)) + "€";
+
     }
 
     public double[] getPriceRangeDouble(int amount) {
