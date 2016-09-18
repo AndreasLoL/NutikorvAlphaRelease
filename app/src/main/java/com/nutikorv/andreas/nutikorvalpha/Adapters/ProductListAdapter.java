@@ -64,7 +64,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
 
 
         //
-        holder.populate(product, f.isLvBusy());
+        holder.populate(product);
 
 
         return convertView;

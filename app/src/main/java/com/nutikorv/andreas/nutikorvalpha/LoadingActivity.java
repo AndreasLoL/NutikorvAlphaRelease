@@ -71,7 +71,9 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     public void onDestroy () {
         Log.i("---------->", "THREAD CANCELED");
-        mHandler.removeCallbacks(mThread);
+        if (mHandler != null && mThread != null) {
+            mHandler.removeCallbacks(mThread);
+        }
         isActivityDestroyed = true;
         super.onDestroy ();
 
@@ -195,8 +197,7 @@ public class LoadingActivity extends AppCompatActivity {
                         if (Build.VERSION.SDK_INT < 19) {
                             LoadProducts(t1, t1);
                         } else {
-//                            loadProductsJSON(t1, t2);
-                            LoadProducts(t1, t1);
+                            loadProductsJSON(t1, t1);
                         }
 
 

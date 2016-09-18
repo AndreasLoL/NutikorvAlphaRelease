@@ -22,4 +22,10 @@ public class GlobalParameters {
 
     public static boolean developerMode = false;
 
+    public static final String BASKETS_PREFERENCE = "baskets";
+
+    public static final String BASKETS_PREFERENCE_SELECTED = "selectedBasket";
+
+    public static final String BASKETS_PREFERENCE_CLASS = "basketHandler";
+
 }

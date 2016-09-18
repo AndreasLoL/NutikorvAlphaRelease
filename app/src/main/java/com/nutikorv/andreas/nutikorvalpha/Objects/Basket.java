@@ -21,6 +21,8 @@ public class Basket {
 
     private String basketName;
 
+    private boolean isSelected = false;
+
 
     public Basket(String basketName) {
         this.basketName = basketName;
@@ -45,6 +47,14 @@ public class Basket {
         }
 
         return temp;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public void removeProduct(Product p) {

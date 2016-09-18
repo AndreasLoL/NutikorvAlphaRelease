@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -39,16 +41,18 @@ public class BasketFragment extends Fragment {
 
     private Button addBasket;
 
-    private SharedPreferences sharedPref = this.getActivity().getSharedPreferences("basketHandler", Context.MODE_PRIVATE);
-    private SharedPreferences.Editor editor = sharedPref.edit();
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
 
     private SimpleAdapter a1;
 
     private BasketStorage basketStorage;
 
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
     private List<Basket> baskets;
+
+    private List<Basket> basketsWithoutSelected;
 
     public BasketFragment() {
         // Required empty public constructor
@@ -65,37 +69,37 @@ public class BasketFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_basket, container, false);
 
-        RecyclerView r1 = (RecyclerView) rootView.findViewById(R.id.basketRecyclerView);
+        sharedPref = this.getActivity().getSharedPreferences(
+                GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
 
+        baskets = new ArrayList<>();
+        Basket selectedBasket = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, null), Basket.class);
 
-
-        if (sharedPref.getString("baskets", null) == null) {
-            basketStorage = new BasketStorage();
-            baskets = new ArrayList<>();
-            Basket b1 = GlobalParameters.b;
-            baskets.add(b1);
-            baskets.add(new Basket("Test item 1"));
-            baskets.add(new Basket("Test item 2"));
-            baskets.add(new Basket("Test item 3"));
-            baskets.add(new Basket("Test item 4"));
-            baskets.add(new Basket("Test item 5"));
-            baskets.add(new Basket("Test item 6"));
-            basketStorage.setBaskets(baskets);
-            updatePreferences();
-            System.out.println("CASE1");
-
-        } else {
-            basketStorage = gson.fromJson(sharedPref.getString("baskets", null), BasketStorage.class);
-            baskets = basketStorage.getBaskets();
-            System.out.println("CASE2");
+        if (selectedBasket != null) {
+            System.out.println("ADDED SETSELECTED");
+            selectedBasket.setSelected(true);
+            baskets.add(selectedBasket);
         }
 
+        RecyclerView r1 = (RecyclerView) rootView.findViewById(R.id.basketRecyclerView);
 
+        if (sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null) == null) {
+            baskets = new ArrayList<>();
+            basketsWithoutSelected = new ArrayList<>();
+            baskets.add(gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, null), Basket.class));
+            updatePreferences();
+        } else {
+            basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                    null), BasketStorage.class);
+            if (basketStorage != null) {
+                basketsWithoutSelected = basketStorage.getBaskets();
+                baskets.addAll(basketsWithoutSelected);
+            } else {
+                basketsWithoutSelected = new ArrayList<>();
+            }
 
-
-        editor.putString("baskets", gson.toJson(basketStorage));
-
-
+        }
 
 
         r1.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -123,9 +127,13 @@ public class BasketFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (et1.getText().toString().length() > 0) {
-                            baskets.add(new Basket(et1.getText().toString()));
-                            a1.notifyDataSetChanged();
-
+                            if (!et1.getText().toString().trim().isEmpty()) {
+                                Basket tempBasket = new Basket(et1.getText().toString());
+                                basketsWithoutSelected.add(tempBasket);
+                                baskets.add(tempBasket);
+                                a1.notifyDataSetChanged();
+                                updatePreferences();
+                            }
                         }
                         dialog.dismiss();
                     }
@@ -145,7 +153,9 @@ public class BasketFragment extends Fragment {
     }
 
     private void updatePreferences() {
-        editor.putString("baskets", gson.toJson(basketStorage));
+        System.out.println("BASKETS JSON!! " + gson.toJson(new BasketStorage(basketsWithoutSelected)));
+        editor.putString(GlobalParameters.BASKETS_PREFERENCE, gson.toJson(new BasketStorage(basketsWithoutSelected)));
+        editor.commit();
     }
 
     @Override
@@ -200,6 +210,7 @@ public class BasketFragment extends Fragment {
             protected TextView productAmount;
             protected TextView productPriceRange;
             protected Button callProductsFragment;
+            protected Switch toggleSwitch;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -210,6 +221,7 @@ public class BasketFragment extends Fragment {
                 productAmount = (TextView) itemView.findViewById(R.id.productAmountText);
                 productPriceRange = (TextView) itemView.findViewById(R.id.priceRangeText);
                 callProductsFragment = (Button) itemView.findViewById(R.id.callFragmentButton);
+                toggleSwitch = (Switch) itemView.findViewById(R.id.toggleSwitch);
 
                 itemView.setOnClickListener(this);
 
@@ -231,7 +243,43 @@ public class BasketFragment extends Fragment {
                 imageLetter.setImageDrawable(drawable);
 
                 itemView.setSelected(false);
+
                 expandedLayout.collapse(false);
+
+                if (baskets.get(position).isSelected()) {
+                    System.out.println("IS SELECTED!");
+                    toggleSwitch.setChecked(true);
+                } else {
+                    toggleSwitch.setChecked(false);
+                }
+
+//                toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        if (isChecked) {
+//                            for (Basket b: baskets) {
+//                                b.setSelected(false);
+//                            }
+//                        }
+//                        baskets.get(position).setSelected(true);
+//                        notifyDataSetChanged();
+//                    }
+//                });
+
+                toggleSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!baskets.get(position).isSelected()) {
+                            for (Basket b: baskets) {
+                                b.setSelected(false);
+                            }
+                        }
+                        baskets.get(position).setSelected(true);
+                        notifyDataSetChanged();
+                    }
+                });
+
+
 
                 productAmount.setText(baskets.get(position).getProductsCount() + " TOODET");
                 productPriceRange.setText(baskets.get(position).getAllProductsPriceRange());

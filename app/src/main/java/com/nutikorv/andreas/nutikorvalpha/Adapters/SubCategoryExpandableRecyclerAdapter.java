@@ -77,12 +77,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
 
     @SuppressWarnings("ResourceType")
     private void setPriceColors(Product currentProduct, MyChildViewHolder childViewHolder) {
-//        childViewHolder.selverPrice.setVisibility(View.VISIBLE);
-//        childViewHolder.maximaPrice.setVisibility(View.VISIBLE);
-//        childViewHolder.prismaPrice.setVisibility(View.VISIBLE);
-//        childViewHolder.selverPrice.setText("Selver: " + String.format("%.2f", currentProduct.getSelverPrice()) + "€");
-//        childViewHolder.maximaPrice.setText("Maxima: " + String.format("%.2f", currentProduct.getMaximaPrice()) + "€");
-//        childViewHolder.prismaPrice.setText("Prisma: " + String.format("%.2f", currentProduct.getPrismaPrice()) + "€");
         childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimaryDark);
         childViewHolder.maximaPrice.setBackgroundResource(R.color.colorPrimaryDark);
         childViewHolder.prismaPrice.setBackgroundResource(R.color.colorPrimaryDark);
@@ -100,14 +94,9 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
                 }
             }
         });
-
         for (int i = 0; i < textViews.size(); i++) {
             textViews.get(i).setText(shops.get(i).toString()); // SHOPS LENGTH MUST EQUAL TEXTVIEWS LENGTH
             textViews.get(i).setVisibility(shops.get(i).getVisibilityValue());
-
-            if (shops.get(i).isOnSale()) {
-                textViews.get(i).setBackgroundResource(R.color.colorPrimaryLight);
-            }
         }
 
     }
@@ -126,8 +115,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
             UrlImageViewHelper.setUrlDrawable(childViewHolder.img, subcategoryChildListItem.getImgURL());
         }
 
-
-
         childViewHolder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +131,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         });
-
     }
 
     public class MyParentViewHolder extends ParentViewHolder {
@@ -156,8 +142,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
             super(itemView);
             lblListHeader = (TextView) itemView.findViewById(R.id.item_header_name);
             mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.item_arrow);
-
-
         }
 
         @Override
@@ -194,9 +178,6 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
                 mArrowExpandImageView.startAnimation(rotateAnimation);
             }
         }
-
-
-
     }
 
     @Override
@@ -213,37 +194,22 @@ public class SubCategoryExpandableRecyclerAdapter extends ExpandableRecyclerAdap
     }
 
     public class MyChildViewHolder extends ChildViewHolder {
-
         public TextView productName;
-
         public TextView selverPrice;
-
         public TextView maximaPrice;
-
         public TextView prismaPrice;
-
         public ImageView img;
-
         public Button add;
-
         public EditText quantity;
-
 
         public MyChildViewHolder(View itemView) {
             super(itemView);
-
             productName = (TextView) itemView.findViewById(R.id.item_name);
-
             selverPrice = (TextView) itemView.findViewById(R.id.selverPrice);
-
             maximaPrice = (TextView) itemView.findViewById(R.id.maximaPrice);
-
             prismaPrice = (TextView) itemView.findViewById(R.id.prismaPrice);
-
             img = (ImageView) itemView.findViewById(R.id.productImage);
-
             add = (Button) itemView.findViewById(R.id.addButton);
-
             quantity = (EditText) itemView.findViewById(R.id.quantityField);
         }
     }
