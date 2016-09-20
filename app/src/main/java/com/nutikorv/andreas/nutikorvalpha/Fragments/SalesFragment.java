@@ -11,15 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.TextView;
 
-import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewScrollable;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.SalesGridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ShopRecyclerAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.SponsorRecyclerAdapter;
-import com.nutikorv.andreas.nutikorvalpha.CategoryGridViewAdapter;
+import com.nutikorv.andreas.nutikorvalpha.Adapters.CategoryGridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Objects.OnSaleProduct;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;

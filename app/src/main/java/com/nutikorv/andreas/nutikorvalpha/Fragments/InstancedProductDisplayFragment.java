@@ -80,6 +80,8 @@ public class InstancedProductDisplayFragment extends Fragment {
         String productsJSON = getArguments().getString("products", "")
                 .replace("\\\"", "\"");
 
+        System.out.println(productsJSON);
+
         productsJSON = productsJSON
                 .substring(1, productsJSON.length() - 1);
 

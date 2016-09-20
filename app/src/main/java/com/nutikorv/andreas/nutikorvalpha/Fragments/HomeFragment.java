@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         viewPager = (ViewPager) rootView.findViewById(R.id.pager);
-        pagerAdapter = new ViewPagerAdapter(this.getChildFragmentManager());
+        pagerAdapter = new ViewPagerAdapter(this.getChildFragmentManager(), getContext());
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(1);

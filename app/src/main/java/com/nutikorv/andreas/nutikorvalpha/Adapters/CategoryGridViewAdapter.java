@@ -1,4 +1,4 @@
-package com.nutikorv.andreas.nutikorvalpha;
+package com.nutikorv.andreas.nutikorvalpha.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nutikorv.andreas.nutikorvalpha.Objects.MainCategory;
+import com.nutikorv.andreas.nutikorvalpha.R;
 
 import java.util.List;
 

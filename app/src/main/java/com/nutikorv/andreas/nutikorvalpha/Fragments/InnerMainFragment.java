@@ -47,6 +47,7 @@ import com.nutikorv.andreas.nutikorvalpha.Adapters.SubCategoryExpandableRecycler
 import com.nutikorv.andreas.nutikorvalpha.MainActivity;
 import com.nutikorv.andreas.nutikorvalpha.Objects.AsyncResult;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
+import com.nutikorv.andreas.nutikorvalpha.Objects.BasketStorage;
 import com.nutikorv.andreas.nutikorvalpha.Objects.MainCategory;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Objects.ProductsFromURL;
@@ -83,7 +84,7 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     private Gson gson;
-    private Basket b;
+    private BasketStorage basketStorage;
 
 
     @Nullable
@@ -97,16 +98,12 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
-        String productJSON = sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, null);
+        basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                null), BasketStorage.class);
 
-        if (productJSON != null) {
-            b = gson.fromJson(productJSON, Basket.class);
-        } else {
-            b = new Basket("Auto-generated basket");
-            updatePreferences();
+        if (basketStorage == null) {
+            basketStorage = new BasketStorage();
         }
-
-
 
         recycler = (RecyclerView) rootView.findViewById(R.id.main_recycler);
 
@@ -158,15 +155,17 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     }
 
     private void updatePreferences() {
-        System.out.println(gson.toJson(b));
-        editor.putString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, gson.toJson(b));
+        editor.putString(GlobalParameters.BASKETS_PREFERENCE, gson.toJson(basketStorage));
         editor.commit();
     }
 
     public void updateBasketPreview() {
         Log.i("------------>", "update");
-        if (b != null) {
-            basket_preview.setText(b.getBasketName() + " (" + b.getProductsCount() + " toodet) " + b.getAllProductsPriceRange());
+        Basket selectedBasket = basketStorage.getSelectedBasket();
+        if (selectedBasket != null) {
+            basket_preview.setText(selectedBasket.getBasketName()
+                    + " (" + selectedBasket.getProductsCount()
+                    + " toodet) " + selectedBasket.getAllProductsPriceRange());
         }
 
     }
@@ -321,10 +320,9 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
                     } catch (Exception e) {
                         qt = 1;
                     }
-                    b.addToBasket((Product) childListItem, qt);
+                    basketStorage.getSelectedBasket().addToBasket((Product) childListItem, qt);
                     GlobalParameters.b.addToBasket((Product) childListItem, qt);
                     updatePreferences();
-                    System.out.println("ADDED");
                     fragment.updateBasketPreview();
                     InputMethodManager imm = (InputMethodManager) v.getContext()
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
