@@ -93,10 +93,10 @@ public class Basket {
         double maxVal = 0;
         for (Product p: allHashProducts.keySet()) {
             double[] doubleArray = p.getPriceRangeDouble(allHashProducts.get(p));
-            if (doubleArray.length == 2) {
+            if (doubleArray != null && doubleArray.length == 2) {
                 minVal += doubleArray[0];
                 maxVal += doubleArray[1];
-            } else {
+            } else if (doubleArray != null && doubleArray.length == 1) {
                 maxVal += doubleArray[0];
             }
         }

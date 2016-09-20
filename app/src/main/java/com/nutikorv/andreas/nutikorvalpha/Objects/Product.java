@@ -67,7 +67,9 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
     private List<Shop> shops = new ArrayList<>();
 
 
-    public Product(String name, double prismaPrice, double selverPrice, double maximaPrice, String EAN, String imgURL, String productDescription, int selverSale, int prismaSale, int maximaSale, List<ShopParameters> shopsParameters) {
+    public Product(String name, double prismaPrice, double selverPrice, double maximaPrice,
+                   String EAN, String imgURL, String productDescription, int selverSale,
+                   int prismaSale, int maximaSale, List<ShopParameters> shopsParameters) {
         super(1001);
         this.name = name;
         this.prismaPrice = prismaPrice;
@@ -127,8 +129,10 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
 
         if (temp.size() > 1) {
             return String.format("%.2f", temp.get(0)) + "€ - " + String.format("%.2f", temp.get(temp.size() - 1)) + "€";
+        } else if (temp.size() == 1) {
+            return String.format("%.2f", temp.get(0)) + "€";
         }
-        return String.format("%.2f", temp.get(0)) + "€";
+        return "Vale toode!";
 
     }
 
@@ -149,8 +153,10 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
 
         if (temp.size() > 1) {
             return new double[]{temp.get(0), temp.get(temp.size() - 1)};
-        } else {
+        } else if (temp.size() == 1) {
             return new double[]{temp.get(0)};
+        } else {
+            return null;
         }
     }
 

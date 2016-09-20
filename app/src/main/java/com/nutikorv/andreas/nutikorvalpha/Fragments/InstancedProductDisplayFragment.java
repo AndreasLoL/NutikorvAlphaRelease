@@ -2,6 +2,7 @@ package com.nutikorv.andreas.nutikorvalpha.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
+import com.nutikorv.andreas.nutikorvalpha.Objects.BasketStorage;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
@@ -42,12 +44,13 @@ import java.util.List;
 public class InstancedProductDisplayFragment extends Fragment {
 
     private TextView prismaPrice;
-
     private TextView maximaPrice;
-
     private TextView selverPrice;
-
     private Basket prods;
+    private RecyclerView r1;
+    private SharedPreferences sharedPref;
+    private Gson gson;
+    private BasketStorage basketStorage;
 
     Activity mActivity;
 
@@ -87,23 +90,56 @@ public class InstancedProductDisplayFragment extends Fragment {
 
         prods = gson.fromJson(productsJSON, Basket.class);
 
-        RecyclerView r1 =  (RecyclerView) rootView.findViewById(R.id.recView);
+        r1 =  (RecyclerView) rootView.findViewById(R.id.recView);
 
         r1.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        r1.setAdapter(new MyRecyclerAdapter(getContext(), prods.getAllProducts()));
+        TextView basketNameDisplay = (TextView) rootView.findViewById(R.id.basketViewName);
+
+        if (prods != null) {
+            r1.setAdapter(new MyRecyclerAdapter(getContext(), prods.getAllProducts()));
+            basketNameDisplay.setText(prods.getBasketName());
+        } else {
+            r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+            basketNameDisplay.setText("Valitud ostukorv puudub!");
+        }
 
         selverPrice = (TextView) rootView.findViewById(R.id.selverPrice);
         maximaPrice = (TextView) rootView.findViewById(R.id.maximaPrice);
         prismaPrice = (TextView) rootView.findViewById(R.id.prismaPrice);
 
-        TextView basketNameDisplay = (TextView) rootView.findViewById(R.id.basketViewName);
-
-        basketNameDisplay.setText(prods.getBasketName());
-
         updatePrices();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        sharedPref = this.getActivity().getSharedPreferences(
+                GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
+
+        gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+
+        basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                null), BasketStorage.class);
+
+        if (basketStorage == null) {
+            basketStorage = new BasketStorage();
+        }
+
+        if (basketStorage.findSelectedBasket() != null) {
+            r1.setAdapter(new MyRecyclerAdapter(getContext(), basketStorage.findSelectedBasket().getAllProducts()));
+        } else {
+            r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+        }
+    }
+
+    private void updatePreferences() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(GlobalParameters.BASKETS_PREFERENCE, gson.toJson(basketStorage));
+        editor.commit();
     }
 
     public void updatePrices() {
@@ -167,10 +203,13 @@ public class InstancedProductDisplayFragment extends Fragment {
             customViewHolder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Item removed!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Item removed!", Toast.LENGTH_SHORT).show();
                     products.remove(p);
                     prods.removeProduct(p);
+                    basketStorage.findSelectedBasket().removeProduct(p);
+                    System.out.println(basketStorage.findSelectedBasket().getAllHashKeys());
                     notifyDataSetChanged();
+                    updatePreferences();
                     updatePrices();
                 }
             });

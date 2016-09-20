@@ -109,7 +109,6 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         basket_preview = (TextView) rootView.findViewById(R.id.basket_preview);
 
-
         MainCategory m;
 
         updateBasketPreview();
@@ -161,11 +160,13 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
     public void updateBasketPreview() {
         Log.i("------------>", "update");
-        Basket selectedBasket = basketStorage.getSelectedBasket();
+        Basket selectedBasket = basketStorage.findSelectedBasket();
         if (selectedBasket != null) {
             basket_preview.setText(selectedBasket.getBasketName()
                     + " (" + selectedBasket.getProductsCount()
                     + " toodet) " + selectedBasket.getAllProductsPriceRange());
+        } else {
+            basket_preview.setText("Puudub aktiivne ostukorv!");
         }
 
     }
@@ -320,7 +321,8 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
                     } catch (Exception e) {
                         qt = 1;
                     }
-                    basketStorage.getSelectedBasket().addToBasket((Product) childListItem, qt);
+                    basketStorage.findSelectedBasket().addToBasket((Product) childListItem, qt);
+                    System.out.println("Added");
                     GlobalParameters.b.addToBasket((Product) childListItem, qt);
                     updatePreferences();
                     fragment.updateBasketPreview();

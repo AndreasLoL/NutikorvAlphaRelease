@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -30,9 +29,6 @@ import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ANDREAS on 12.07.2016.
@@ -79,34 +75,6 @@ public class BasketFragment extends Fragment {
             Log.i("->", "Loaded stored basket!");
         }
 
-
-
-//        baskets = new ArrayList<>();
-//        Basket selectedBasket = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, null), Basket.class);
-//
-//        if (selectedBasket != null) {
-//            System.out.println("ADDED SETSELECTED");
-//            selectedBasket.setSelected(true);
-//            baskets.add(selectedBasket);
-//        }
-//
-//
-//        if (sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null) == null) {
-//            baskets = new ArrayList<>();
-//            basketsWithoutSelected = new ArrayList<>();
-//            baskets.add(gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE_SELECTED, null), Basket.class));
-//            updatePreferences();
-//        } else {
-//            basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
-//                    null), BasketStorage.class);
-//            if (basketStorage != null) {
-//                basketsWithoutSelected = basketStorage.getBaskets();
-//                baskets.addAll(basketsWithoutSelected);
-//            } else {
-//                basketsWithoutSelected = new ArrayList<>();
-//            }
-//
-//        }
 
         RecyclerView r1 = (RecyclerView) rootView.findViewById(R.id.basketRecyclerView);
         r1.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -194,7 +162,7 @@ public class BasketFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return basketStorage.getUnitedBaskets().size();
+            return basketStorage.getBaskets().size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -227,7 +195,7 @@ public class BasketFragment extends Fragment {
             }
 
             public void bind(final int position) {
-                final Basket currentBasket = basketStorage.getUnitedBaskets().get(position);
+                final Basket currentBasket = basketStorage.getBaskets().get(position);
 
                 final String basketID = currentBasket.getBasketName();
                 basketName.setText(basketID);
@@ -255,7 +223,11 @@ public class BasketFragment extends Fragment {
                     public void onClick(View v) {
                         if (!currentBasket.isSelected()) {
                             Log.i("Selection change", "Selection change detected!");
-                            basketStorage.setSelectedBasket(currentBasket);
+//                            basketStorage.setSelectedBasket(currentBasket);
+                            if (basketStorage.findSelectedBasket() != null) {
+                                basketStorage.findSelectedBasket().setSelected(false);
+                            }
+                            currentBasket.setSelected(true);
                             updatePreferences();
                         }
                         notifyDataSetChanged();

@@ -15,13 +15,13 @@ public class BasketStorage {
     private Basket selectedBasket;
 
     public BasketStorage() {
-        selectedBasket = new Basket("Genereeritud ostukorv");
+//        selectedBasket = new Basket("Genereeritud ostukorv");
         baskets = new ArrayList<>();
     }
 
     public BasketStorage(List<Basket> baskets, Basket selectedBasket) {
         this.baskets = baskets;
-        this.selectedBasket = selectedBasket;
+//        this.selectedBasket = selectedBasket;
     }
 
     public BasketStorage(List<Basket> baskets) {
@@ -38,33 +38,42 @@ public class BasketStorage {
     }
 
 
-    public Basket getSelectedBasket() {
-        return selectedBasket;
-    }
+//    public Basket getSelectedBasket() {
+//        return selectedBasket;
+//    }
 
-    public void setSelectedBasket(Basket basketToSelect) {
-        this.selectedBasket.setSelected(false);
-        baskets.add(this.selectedBasket);
-        if (!baskets.contains(basketToSelect)) {
-            Log.i("--->", "Unexpected result setting new selected basket!");
-        } else {
-            baskets.remove(basketToSelect);
-        }
-        this.selectedBasket = basketToSelect;
-        this.selectedBasket.setSelected(true);
-
-        Log.i("----->", "Selected basket is: " + selectedBasket.getBasketName());
-
-    }
+//    public void setSelectedBasket(Basket basketToSelect) {
+//        this.selectedBasket.setSelected(false);
+//        baskets.add(this.selectedBasket);
+//        if (!baskets.contains(basketToSelect)) {
+//            Log.i("--->", "Unexpected result setting new selected basket!");
+//        } else {
+//            baskets.remove(basketToSelect);
+//        }
+//        this.selectedBasket = basketToSelect;
+//        this.selectedBasket.setSelected(true);
+//
+//        Log.i("----->", "Selected basket is: " + selectedBasket.getBasketName());
+//
+//    }
 
     public void addBasket(Basket basketToAdd) {
         baskets.add(basketToAdd);
     }
 
-    public List<Basket> getUnitedBaskets() {
-        List<Basket> allBaskets = new ArrayList<>();
-        allBaskets.add(selectedBasket);
-        allBaskets.addAll(baskets);
-        return allBaskets;
+    public Basket findSelectedBasket() {
+        for (Basket basket: baskets) {
+            if (basket.isSelected()) {
+                return basket;
+            }
+        }
+        return null;
     }
+
+//    public List<Basket> getUnitedBaskets() {
+//        List<Basket> allBaskets = new ArrayList<>();
+//        allBaskets.add(selectedBasket);
+//        allBaskets.addAll(baskets);
+//        return allBaskets;
+//    }
 }
