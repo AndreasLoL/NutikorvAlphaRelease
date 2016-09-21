@@ -1,14 +1,12 @@
 package com.nutikorv.andreas.nutikorvalpha.Adapters;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
@@ -38,9 +36,9 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
 
 //        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.spList.get(position).getLinearLogoURL());
 
-        System.out.println("SIZE " + GlobalParameters.r.getSpList().size());
+        System.out.println("SIZE " + GlobalParameters.productsStorage.getSpList().size());
 
-        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.r.getSpList().get(position).getLinearLogoURL());
+        UrlImageViewHelper.setUrlDrawable(holder.shopName, GlobalParameters.productsStorage.getSpList().get(position).getLinearLogoURL());
 
 //        holder.shopName.setText("  POE NIMI  ");
 
@@ -50,7 +48,7 @@ public class ShopRecyclerAdapter extends RecyclerView.Adapter<ShopRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return GlobalParameters.r.getSpList().size();
+        return GlobalParameters.productsStorage.getSpList().size();
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {

@@ -1,35 +1,25 @@
 package com.nutikorv.andreas.nutikorvalpha.Fragments;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
@@ -38,37 +28,23 @@ import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ExpandableRecyclerViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.ProductListAdapter;
-import com.nutikorv.andreas.nutikorvalpha.Adapters.SubCategoryExpandableRecyclerAdapter;
-import com.nutikorv.andreas.nutikorvalpha.MainActivity;
-import com.nutikorv.andreas.nutikorvalpha.Objects.AsyncResult;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
 import com.nutikorv.andreas.nutikorvalpha.Objects.BasketStorage;
 import com.nutikorv.andreas.nutikorvalpha.Objects.MainCategory;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
-import com.nutikorv.andreas.nutikorvalpha.Objects.ProductsFromURL;
-import com.nutikorv.andreas.nutikorvalpha.Objects.ReadProducts;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubCategory;
-import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryChildListItem;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
-import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -114,13 +90,13 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
         updateBasketPreview();
 
         if (GlobalParameters.selectedCategory == null) {
-            m = GlobalParameters.r.getCategories().get(0);
+            m = GlobalParameters.productsStorage.getCategories().get(0);
         } else {
             m = GlobalParameters.selectedCategory;
         }
 
 
-        if (GlobalParameters.r != null) {
+        if (GlobalParameters.productsStorage != null) {
 
             List<ParentListItem> l1 = new ArrayList<>();
 
@@ -182,12 +158,12 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
 
         if (GlobalParameters.selectedCategory == null) {
-            m = GlobalParameters.r.getCategories().get(0);
+            m = GlobalParameters.productsStorage.getCategories().get(0);
         } else {
             m = GlobalParameters.selectedCategory;
         }
 
-        if (GlobalParameters.r != null) {
+        if (GlobalParameters.productsStorage != null) {
 
             List<ParentListItem> l1 = new ArrayList<>();
 
@@ -321,8 +297,9 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
                     } catch (Exception e) {
                         qt = 1;
                     }
-                    basketStorage.findSelectedBasket().addToBasket((Product) childListItem, qt);
-                    System.out.println("Added");
+                    if (basketStorage.findSelectedBasket() != null) {
+                        basketStorage.findSelectedBasket().addToBasket((Product) childListItem, qt);
+                    }
                     GlobalParameters.b.addToBasket((Product) childListItem, qt);
                     updatePreferences();
                     fragment.updateBasketPreview();

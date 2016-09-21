@@ -8,12 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
-import com.nutikorv.andreas.nutikorvalpha.MainActivity;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
 
@@ -44,14 +41,14 @@ public class InnerCategoryFragment extends Fragment {
 
 //        ListView l1 = (ListView) rootView.findViewById(R.id.categoriesView);
 //
-//        ArrayAdapter<String> a1 = new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, GlobalParameters.r.getCategoriesString());
+//        ArrayAdapter<String> a1 = new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, GlobalParameters.productsStorage.getCategoriesString());
 //
 //        l1.setAdapter(a1);
 //
 //        l1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                GlobalParameters.selectedCategory = GlobalParameters.r.getCategories().get(position);
+//                GlobalParameters.selectedCategory = GlobalParameters.productsStorage.getCategories().get(position);
 //                viewPager.setCurrentItem(1, true);
 //
 //
@@ -63,12 +60,12 @@ public class InnerCategoryFragment extends Fragment {
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
 
-        gridView.setAdapter(new GridViewAdapter(getContext(), GlobalParameters.r.getCategories()));
+        gridView.setAdapter(new GridViewAdapter(getContext(), GlobalParameters.productsStorage.getCategories()));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                GlobalParameters.selectedCategory = GlobalParameters.r.getCategories().get(position);
+                GlobalParameters.selectedCategory = GlobalParameters.productsStorage.getCategories().get(position);
                 viewPager.setCurrentItem(1, true);
                 HomeFragment TabOfFragManage1 = (HomeFragment) getParentFragment();
                 TabOfFragManage1.resetCategories();

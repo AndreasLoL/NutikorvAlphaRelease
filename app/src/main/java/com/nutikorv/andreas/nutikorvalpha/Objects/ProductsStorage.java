@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by ANDREAS on 30.06.2016.
  */
-public class ReadProducts {
+public class ProductsStorage {
 
     private List<MainCategory> categories;
 
@@ -39,7 +39,7 @@ public class ReadProducts {
         return spList;
     }
 
-    public ReadProducts() {
+    public ProductsStorage() {
 
         categories = new ArrayList<>();
 

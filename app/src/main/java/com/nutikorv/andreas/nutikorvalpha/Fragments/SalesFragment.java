@@ -92,7 +92,7 @@ public class SalesFragment extends Fragment {
         List<OnSaleProduct> sponsor = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            sponsor.add(GlobalParameters.r.getOnSaleProducts().get(i + 10));
+            sponsor.add(GlobalParameters.productsStorage.getOnSaleProducts().get(i + 10));
         }
 
         r1.setAdapter(new SponsorRecyclerAdapter(getContext(), sponsor));

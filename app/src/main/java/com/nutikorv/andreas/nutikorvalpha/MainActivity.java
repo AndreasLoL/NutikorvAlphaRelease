@@ -1,15 +1,12 @@
 package com.nutikorv.andreas.nutikorvalpha;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,15 +16,6 @@ import com.google.gson.Gson;
 import com.nutikorv.andreas.nutikorvalpha.Fragments.BasketFragment;
 import com.nutikorv.andreas.nutikorvalpha.Fragments.HomeFragment;
 import com.nutikorv.andreas.nutikorvalpha.Fragments.SalesFragment;
-import com.nutikorv.andreas.nutikorvalpha.Objects.AsyncResult;
-import com.nutikorv.andreas.nutikorvalpha.Objects.ProductsFromURL;
-import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 

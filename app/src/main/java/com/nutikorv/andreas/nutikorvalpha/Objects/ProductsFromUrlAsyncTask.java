@@ -16,9 +16,9 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class ProductsFromURL extends AsyncTask<String, Void, String> {
+public class ProductsFromUrlAsyncTask extends AsyncTask<String, Void, String> {
     AsyncResult callback;
-    public ProductsFromURL(AsyncResult callback) {
+    public ProductsFromUrlAsyncTask(AsyncResult callback) {
         this.callback = callback;
     }
     @Override
