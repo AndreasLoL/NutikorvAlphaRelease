@@ -105,6 +105,8 @@ public class ProductsStorage {
     }
 
     public void loadProductsFromJSON(JSONObject o1) throws JSONException {
+
+        System.out.println(o1.get("selver"));
         //SDK >18
         Product p = new Product(o1.getString("nimi"), o1.getDouble("prisma"), o1.getDouble("selver"), o1.getDouble("maxima"), o1.getString("EAN"), o1.getString("pilt"), "See on toode!", o1.getInt("selverp"), o1.getInt("prismap"), o1.getInt("maximap"), spList);
 

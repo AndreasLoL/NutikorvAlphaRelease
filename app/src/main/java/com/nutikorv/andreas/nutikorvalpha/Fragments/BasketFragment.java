@@ -65,13 +65,18 @@ public class BasketFragment extends Fragment {
                 GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
-        if (sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null) == null) {
+        System.out.println(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null));
+
+        if (sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null) == null ||
+                sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null).equals("null")) {
             basketStorage = new BasketStorage();
             updatePreferences();
             Log.i("-->", "Created new basket");
         } else {
-            basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
-                    null), BasketStorage.class);
+            System.out.println(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                    null));
+            basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE, null), BasketStorage.class);
+
             Log.i("->", "Loaded stored basket!");
         }
 
@@ -162,6 +167,10 @@ public class BasketFragment extends Fragment {
 
         @Override
         public int getItemCount() {
+            if (basketStorage == null) {
+                Log.i("--->!","Failed to load basket storage!");
+                return 0;
+            }
             return basketStorage.getBaskets().size();
         }
 
@@ -242,7 +251,7 @@ public class BasketFragment extends Fragment {
                     public void onClick(View v) {
                         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
-                        Fragment newFragment = new InstancedProductDisplayFragment().newInstance(gson.toJson(gson.toJson(currentBasket)));
+                        Fragment newFragment = new InstancedProductDisplayFragment().newInstance(1, gson.toJson(gson.toJson(currentBasket)));
                         FragmentTransaction transaction = thisFragment.getFragmentManager().beginTransaction();
 
                         transaction.replace(R.id.container_body, newFragment);

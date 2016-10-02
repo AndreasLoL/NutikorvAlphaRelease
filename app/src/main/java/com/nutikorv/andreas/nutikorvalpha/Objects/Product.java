@@ -160,4 +160,16 @@ public class Product extends ExpandableRecyclerAdapter.ListItem {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (((Product) obj).getEAN().equals(EAN) ) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return EAN.hashCode();
+    }
 }

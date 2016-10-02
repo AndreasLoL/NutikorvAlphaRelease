@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.nutikorv.andreas.nutikorvalpha.Adapters.GridViewAdapter;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Basket;
@@ -28,6 +30,7 @@ import com.nutikorv.andreas.nutikorvalpha.Objects.Product;
 import com.nutikorv.andreas.nutikorvalpha.Objects.Shop;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
+import com.nutikorv.andreas.nutikorvalpha.SharedPreferenceEditor;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -51,14 +54,16 @@ public class InstancedProductDisplayFragment extends Fragment {
     private SharedPreferences sharedPref;
     private Gson gson;
     private BasketStorage basketStorage;
+    private int dataCase;
 
     Activity mActivity;
 
-    public static InstancedProductDisplayFragment newInstance(String products) {
+    public static InstancedProductDisplayFragment newInstance(int dataCase, String products) {
         InstancedProductDisplayFragment myFragment = new InstancedProductDisplayFragment();
 
         Bundle args = new Bundle();
         args.putString("products", products + "");
+        args.putInt("dataCase", dataCase);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -78,30 +83,58 @@ public class InstancedProductDisplayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_display, container, false);
 
-        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
-
-        String productsJSON = getArguments().getString("products", "")
-                .replace("\\\"", "\"");
-
-        System.out.println(productsJSON);
-
-        productsJSON = productsJSON
-                .substring(1, productsJSON.length() - 1);
-
-        prods = gson.fromJson(productsJSON, Basket.class);
+        gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
         r1 =  (RecyclerView) rootView.findViewById(R.id.recView);
-
         r1.setLayoutManager(new LinearLayoutManager(getContext()));
-
         TextView basketNameDisplay = (TextView) rootView.findViewById(R.id.basketViewName);
 
-        if (prods != null) {
-            r1.setAdapter(new MyRecyclerAdapter(getContext(), prods.getAllProducts()));
-            basketNameDisplay.setText(prods.getBasketName());
-        } else {
-            r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
-            basketNameDisplay.setText("Valitud ostukorv puudub!");
+        sharedPref = this.getActivity().getSharedPreferences(
+                GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
+
+        dataCase = getArguments().getInt("dataCase");
+
+        switch (getArguments().getInt("dataCase")){
+            case 0:
+                System.out.println("CASE SHAREDPREF");
+                basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                        null), BasketStorage.class);
+
+                if (basketStorage == null) {
+                    basketStorage = new BasketStorage();
+                }
+
+                if (basketStorage.findSelectedBasket() != null) {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), basketStorage.findSelectedBasket().getAllProducts()));
+                    basketNameDisplay.setText(basketStorage.findSelectedBasket().getBasketName());
+                } else {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+                }
+                break;
+            case 1:
+                System.out.println("CASE ARGUMENTS");
+                String productsJSON = getArguments().getString("products", "")
+                        .replace("\\\"", "\"");
+
+                productsJSON = productsJSON
+                        .substring(1, productsJSON.length() - 1);
+
+                System.out.println(productsJSON);
+
+                try {
+                    prods = gson.fromJson(productsJSON, Basket.class);
+                } catch (JsonSyntaxException jsonE) {
+                    prods = null;
+                }
+
+                if (prods != null) {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), prods.getAllProducts()));
+                    basketNameDisplay.setText(prods.getBasketName());
+                } else {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+                    basketNameDisplay.setText("Valitud ostukorv puudub!");
+                }
+
         }
 
         selverPrice = (TextView) rootView.findViewById(R.id.selverPrice);
@@ -117,23 +150,53 @@ public class InstancedProductDisplayFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        sharedPref = this.getActivity().getSharedPreferences(
-                GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
+        System.out.println("CASE " + dataCase);
 
-        gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+        Log.i("----------->", "ON RESUME CALLED");
 
-        basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
-                null), BasketStorage.class);
+        switch (dataCase){
+            case 0:
+                gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
-        if (basketStorage == null) {
-            basketStorage = new BasketStorage();
+                basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                        null), BasketStorage.class);
+
+                if (basketStorage == null) {
+                    basketStorage = new BasketStorage();
+                }
+
+                if (basketStorage.findSelectedBasket() != null) {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), basketStorage.findSelectedBasket().getAllProducts()));
+                } else {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+                }
+                break;
+            case 1:
+                System.out.println("CASE ARGUMENTS");
+                String productsJSON = getArguments().getString("products", "")
+                        .replace("\\\"", "\"");
+
+                productsJSON = productsJSON
+                        .substring(1, productsJSON.length() - 1);
+
+                System.out.println(productsJSON);
+
+                try {
+                    prods = gson.fromJson(productsJSON, Basket.class);
+                } catch (JsonSyntaxException jsonE) {
+                    prods = null;
+                }
+
+                if (prods != null) {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), prods.getAllProducts()));
+                } else {
+                    r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
+                }
         }
 
-        if (basketStorage.findSelectedBasket() != null) {
-            r1.setAdapter(new MyRecyclerAdapter(getContext(), basketStorage.findSelectedBasket().getAllProducts()));
-        } else {
-            r1.setAdapter(new MyRecyclerAdapter(getContext(), new LinkedHashMap<Product, Integer>()));
-        }
+        updatePrices();
+
+
     }
 
     private void updatePreferences() {
@@ -143,15 +206,32 @@ public class InstancedProductDisplayFragment extends Fragment {
     }
 
     public void updatePrices() {
-        if (prods != null && prods.getAllProducts() != null) {
-            selverPrice.setText(String.format("%.2f", prods.getSelverPrice()) + "€");
-            prismaPrice.setText(String.format("%.2f", prods.getPrismaPrice()) + "€");
-            maximaPrice.setText(String.format("%.2f", prods.getMaximaPrice()) + "€");
+        Basket selectedBasket = null;
+        switch (dataCase) {
+            case 0:
+                if (basketStorage != null && basketStorage.findSelectedBasket() != null
+                        && basketStorage.findSelectedBasket().getAllProducts() != null) {
+                    selectedBasket = basketStorage.findSelectedBasket();
+
+                }
+                break;
+            case 1:
+                if (prods != null && prods.getAllProducts() != null) {
+                    selectedBasket = prods;
+                }
+                break;
+        }
+
+        if (selectedBasket != null) {
+            selverPrice.setText(String.format("%.2f", selectedBasket.getSelverPrice()) + "€");
+            prismaPrice.setText(String.format("%.2f", selectedBasket.getPrismaPrice()) + "€");
+            maximaPrice.setText(String.format("%.2f", selectedBasket.getMaximaPrice()) + "€");
         } else {
             selverPrice.setText(0 + "€");
             maximaPrice.setText(0 + "€");
             prismaPrice.setText(0 + "€");
         }
+
     }
 
 
@@ -203,11 +283,16 @@ public class InstancedProductDisplayFragment extends Fragment {
             customViewHolder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(getContext(), "Item removed!", Toast.LENGTH_SHORT).show();
+                    switch (dataCase){
+                        case 0:
+                            basketStorage.findSelectedBasket().removeProduct(p);
+                            SharedPreferenceEditor.removeProductFromSelectedBasket(p, getContext());
+                            break;
+                        case 1:
+                            prods.removeProduct(p);
+                            break;
+                    }
                     products.remove(p);
-                    prods.removeProduct(p);
-                    basketStorage.findSelectedBasket().removeProduct(p);
-                    System.out.println(basketStorage.findSelectedBasket().getAllHashKeys());
                     notifyDataSetChanged();
                     updatePreferences();
                     updatePrices();
@@ -240,13 +325,12 @@ public class InstancedProductDisplayFragment extends Fragment {
                 textViews.get(i).setText(shops.get(i).toString()); // SHOPS LENGTH MUST EQUAL TEXTVIEWS LENGTH
                 textViews.get(i).setVisibility(shops.get(i).getVisibilityValue());
 
-                if (shops.get(i).isOnSale()) {
-                    textViews.get(i).setBackgroundResource(R.color.colorPrimaryLight);
-                }
+//                if (shops.get(i).isOnSale()) {
+//                    textViews.get(i).setBackgroundResource(R.color.colorPrimaryLight);
+//                }
             }
 
         }
-
 
         @Override
         public int getItemCount() {

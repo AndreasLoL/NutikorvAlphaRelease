@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#b388ff"
+    android:weightSum="1">
+
+    <com.nutikorv.andreas.nutikorvalpha.CustomViews.IntroSlidesTextView
+        android:layout_width="300dp"
+        android:layout_height="120dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Soodustused"
+        android:id="@+id/textView"
+        android:textColor="#FFF"
+        android:textSize="40sp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView5"
+        android:layout_gravity="center_horizontal"
+        android:src="#ffffff" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:id="@+id/imageView6"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/intro_slide_2_image"
+        android:layout_marginTop="20dp" />
+
+    <com.nutikorv.andreas.nutikorvalpha.CustomViews.IntroSlidesTextView
+        android:layout_width="350dp"
+        android:layout_height="75dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Nutikorvis saad kiire ülevaate poodides kehtivatest soodustustest."
+        android:id="@+id/textView14"
+        android:layout_gravity="center_horizontal"
+        android:lines="2"
+        android:textColor="#FFF"
+        android:maxLines="2"
+        android:textSize="21sp"
+        android:textAlignment="center"
+        android:layout_marginTop="35dp"
+        android:gravity="center" />
+</LinearLayout>

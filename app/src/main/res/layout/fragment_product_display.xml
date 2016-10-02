@@ -9,6 +9,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="MINU OSTUKORV"
         android:elevation="6dp"
+        android:textAllCaps="true"
         android:id="@+id/basketViewName"
         android:gravity="center"
         android:singleLine="true"

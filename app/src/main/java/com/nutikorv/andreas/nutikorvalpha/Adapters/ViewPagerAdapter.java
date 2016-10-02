@@ -52,7 +52,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                         GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
                 BasketStorage basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
                         null), BasketStorage.class);
-                return new InstancedProductDisplayFragment().newInstance(gson.toJson(gson.toJson(basketStorage.findSelectedBasket())));
+                if (basketStorage == null) {
+                    return new InstancedProductDisplayFragment().newInstance(0, null);
+                }
+                return new InstancedProductDisplayFragment().newInstance(0, gson.toJson(gson.toJson(basketStorage.findSelectedBasket())));
             default:
                 break;
         }

@@ -80,10 +80,12 @@ public class Basket {
     public void addToBasket(Product p, int quantity) {
         if (!allProducts.contains(p)) {
             allProducts.add(p);
+            System.out.println("DOES NOT CONTAIN KEY");
         }
         if (allHashProducts.containsKey(p)) {
             allHashProducts.put(p, allHashProducts.get(p) + quantity);
         } else {
+            System.out.println("NOT IN DICTIONARY!");
             allHashProducts.put(p, quantity);
         }
     }

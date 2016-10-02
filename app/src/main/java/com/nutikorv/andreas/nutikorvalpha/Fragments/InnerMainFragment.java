@@ -40,6 +40,7 @@ import com.nutikorv.andreas.nutikorvalpha.Objects.SubCategory;
 import com.nutikorv.andreas.nutikorvalpha.Objects.SubcategoryParentListItem;
 import com.nutikorv.andreas.nutikorvalpha.Parameters.GlobalParameters;
 import com.nutikorv.andreas.nutikorvalpha.R;
+import com.nutikorv.andreas.nutikorvalpha.SharedPreferenceEditor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +59,6 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     private CategoryExpandableAdapter adapter1;
     private TextView basket_preview;
     private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
     private Gson gson;
     private BasketStorage basketStorage;
 
@@ -70,7 +70,6 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         sharedPref = this.getActivity().getSharedPreferences(
                 GlobalParameters.BASKETS_PREFERENCE_SELECTED, Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
 
         gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
@@ -109,29 +108,11 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
 
             adapter1 = new CategoryExpandableAdapter(getContext(), l1, this);
-            adapter1.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
-                @Override
-                public void onListItemExpanded(int position) {
-                    Log.v("-------------->", "EXPAND DETECTED");
-                }
-
-                @Override
-                public void onListItemCollapsed(int position) {
-                    Log.v("-------------->", "COLLAPSE DETECTED");
-                }
-            });
-
-
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             recycler.setAdapter(adapter1);
         }
 
         return rootView;
-    }
-
-    private void updatePreferences() {
-        editor.putString(GlobalParameters.BASKETS_PREFERENCE, gson.toJson(basketStorage));
-        editor.commit();
     }
 
     public void updateBasketPreview() {
@@ -152,8 +133,14 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
     public void onResume() {
         super.onResume();
 
-        MainCategory m;
+        basketStorage = gson.fromJson(sharedPref.getString(GlobalParameters.BASKETS_PREFERENCE,
+                null), BasketStorage.class);
 
+        if (basketStorage == null) {
+            basketStorage = new BasketStorage();
+        }
+
+        MainCategory m;
         updateBasketPreview();
 
 
@@ -242,12 +229,6 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
 
         }
 
-        private void onSaleColor(boolean onSale, TextView t1) {
-            if (onSale) {
-                t1.setTextColor(Color.YELLOW);
-            }
-        }
-
         @SuppressWarnings("ResourceType")
         private void setPriceColors(Product currentProduct, MyChildViewHolder childViewHolder) {
             childViewHolder.selverPrice.setBackgroundResource(R.color.colorPrimaryDark);
@@ -297,11 +278,8 @@ public class InnerMainFragment extends Fragment implements ExpandableRecyclerVie
                     } catch (Exception e) {
                         qt = 1;
                     }
-                    if (basketStorage.findSelectedBasket() != null) {
-                        basketStorage.findSelectedBasket().addToBasket((Product) childListItem, qt);
-                    }
-                    GlobalParameters.b.addToBasket((Product) childListItem, qt);
-                    updatePreferences();
+                    SharedPreferenceEditor.addProductToSelectedBasket((Product) childListItem, qt, getContext());
+                    basketStorage.findSelectedBasket().addToBasket((Product) childListItem, qt);
                     fragment.updateBasketPreview();
                     InputMethodManager imm = (InputMethodManager) v.getContext()
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
