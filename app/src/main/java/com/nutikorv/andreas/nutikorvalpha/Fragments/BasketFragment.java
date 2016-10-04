@@ -176,16 +176,15 @@ public class BasketFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private TextView expandButton;
             private int position;
             private String letter;
-            protected ImageView imageLetter;
-            protected TextView basketName;
-            protected ExpandableLayout expandedLayout;
-            protected TextView productAmount;
-            protected TextView productPriceRange;
-            protected Button callProductsFragment;
-            protected Switch toggleSwitch;
+            ImageView imageLetter;
+            TextView basketName;
+            ExpandableLayout expandedLayout;
+            TextView productAmount;
+            TextView productPriceRange;
+            Button callProductsFragment;
+            Switch toggleSwitch;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -197,6 +196,7 @@ public class BasketFragment extends Fragment {
                 productPriceRange = (TextView) itemView.findViewById(R.id.priceRangeText);
                 callProductsFragment = (Button) itemView.findViewById(R.id.callFragmentButton);
                 toggleSwitch = (Switch) itemView.findViewById(R.id.toggleSwitch);
+
 
                 itemView.setOnClickListener(this);
 
@@ -210,6 +210,7 @@ public class BasketFragment extends Fragment {
                 basketName.setText(basketID);
 
                 letter = "" + basketID.charAt(0);
+                this.position = position;
 
                 TextDrawable drawable = TextDrawable.builder()
                         .buildRound(letter, generator.getColor(basketName));

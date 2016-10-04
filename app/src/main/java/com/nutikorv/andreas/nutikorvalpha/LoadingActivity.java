@@ -28,9 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * App launch activity.
  * Responsible for:
@@ -57,13 +54,10 @@ public class LoadingActivity extends AppCompatActivity {
     private ViewPager introSlidesViewPager;
     private int[] introViewPagerLayouts;
     private int activeViewPagerPage = 0;
-    private Handler introSlidesAutoSwitchHandler;
-    private Runnable introSlidesAutoRunnable;
     private Gson gson;
     private LinearLayout dotsLayout;
     private Button btnSkip;
     private Button btnNext;
-    private TextView[] dots;
 
     private static final String PRODUCTS_URL_SDK18 = "https://spreadsheets.google.com/feeds/list" +
             "/1SSpGG-PnuUMxZbJ5qeuzhoIifj65nuKCmjZq48zkAO0/od6/public/basic?alt=json";
@@ -72,8 +66,6 @@ public class LoadingActivity extends AppCompatActivity {
             "/s/AKfycbygukdW3tt8sCPcFDlkMnMuNu9bH5fpt7bKV50p2bM/exec?id=1SSpGG-PnuUMxZbJ5qeuzhoI" +
             "ifj65nuKCmjZq48zkAO0";
 
-    private static final int SLIDE_SWITCH_DELAY = 2000;
-    private static final int SLIDE_MINIMUM_DELAY = 400;
     private static final int MAXIMUM_VERSION_FETCH_TIME = 5000;
     private static final int ONE_SECOND_DELAY = 1000;
     private static final int CASE_OFFLINE = 0;
@@ -101,10 +93,6 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        final TextView userInformationTextView = null;
-//        final TextView userInformationTextView = (TextView) findViewById(R.id.mainText);
-//        userInformationTextView.setVisibility(View.GONE);
-
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnSkip = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -131,8 +119,6 @@ public class LoadingActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
                 if (activeViewPagerPage < introViewPagerLayouts.length) {
                     introSlidesViewPager.setCurrentItem(++activeViewPagerPage, true);
                 } else {
@@ -143,31 +129,12 @@ public class LoadingActivity extends AppCompatActivity {
         addBottomDots(0);
 
 
-        introSlidesAutoSwitchHandler = new Handler();
-        introSlidesAutoRunnable = new Runnable() {
-            public void run() {
-                if (!isActivityDestroyed) {
-                    if (activeViewPagerPage == introViewPagerLayouts.length) {
-                        activeViewPagerPage = 0;
-                    }
-//                    introSlidesViewPager.setCurrentItem(activeViewPagerPage++, true);
-                }
-            }
-        };
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                introSlidesAutoSwitchHandler.post(introSlidesAutoRunnable);
-            }
-        }, SLIDE_MINIMUM_DELAY, SLIDE_SWITCH_DELAY);
-
         sharedPreferences = getSharedPreferences(VERSION_CONTROL, 0);
 
         final int version = sharedPreferences.getInt(STORED_VERSION, 1);
 
         if (!isOnline()) {
-            fetchProductsJson(CASE_OFFLINE, userInformationTextView);
+            fetchProductsJson(CASE_OFFLINE);
             return;
         }
 
@@ -178,7 +145,7 @@ public class LoadingActivity extends AppCompatActivity {
                 slowConnectionHandler.postDelayed(new Runnable() {
                     public void run() {
                         if(!isActivityDestroyed){
-                            fetchProductsJson(0, userInformationTextView);
+                            fetchProductsJson(CASE_OFFLINE);
                             productsFromUrlAsyncTaskAsyncTask.cancel(true);
                         }
                     }
@@ -191,10 +158,10 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onResult(JSONObject versionAsyncResult) {
                 try {
-                    fetchVersionNumber(versionAsyncResult, version, userInformationTextView);
+                    fetchVersionNumber(versionAsyncResult, version);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    fetchProductsJson(0, userInformationTextView);
+                    fetchProductsJson(CASE_OFFLINE);
                 }
             }
         };
@@ -208,29 +175,25 @@ public class LoadingActivity extends AppCompatActivity {
      * Parser is meant for all SDKs.
      * @param object
      * @param innerVersion
-     * @param userInformationTextView
      * @throws JSONException
      */
-     private void fetchVersionNumber(JSONObject object, int innerVersion,
-                                     TextView userInformationTextView) throws JSONException {
+     private void fetchVersionNumber(JSONObject object, int innerVersion) throws JSONException {
          JSONArray versionArray = (JSONArray) object.get("version");
          JSONObject versionArrayJSONObject = versionArray.getJSONObject(0);
          Integer onlineVersion = versionArrayJSONObject.getInt("version");
 
          if (onlineVersion > innerVersion || GlobalParameters.developerMode) {
 
-//             userInformationTextView.setText("TOODETE UUENDUS TUVASTATUD");
-
              if (Build.VERSION.SDK_INT < 19) {
-                 fetchProductsJson(CASE_ONLINE_SDK18, userInformationTextView);
+                 fetchProductsJson(CASE_ONLINE_SDK18);
              } else {
-                 fetchProductsJson(CASE_ONLINE_PLUS_SDK19, userInformationTextView);
+                 fetchProductsJson(CASE_ONLINE_PLUS_SDK19);
              }
              SharedPreferences.Editor editor = sharedPreferences.edit();
              editor.putInt(STORED_VERSION, onlineVersion);
              editor.commit();
          } else {
-             fetchProductsJson(3, userInformationTextView);
+             fetchProductsJson(3);
          }
      }
 
@@ -247,15 +210,11 @@ public class LoadingActivity extends AppCompatActivity {
      * Case 3 (CASE_SAME_VERSION) -> Android phone with Internet connection, but no new version
      * detected. Read data from products JSON stored in shared preferences.
      * @param fetchCase Integer value for corresponding data fetch case. Cases explained above.
-     * @param informationTextView TextView, give user information about what is going on in case of
-     *                            long delay (for example large product update)
      */
-    private void fetchProductsJson(final int fetchCase, final TextView informationTextView) {
+    private void fetchProductsJson(final int fetchCase) {
         switch(fetchCase) {
             case CASE_OFFLINE:
                 final int version = sharedPreferences.getInt(STORED_VERSION, 1);
-
-//                informationTextView.setText("Ühendus toodete andmebaasiga puudub!");
 
                 if (version != 1 && sharedPreferences.getString(ALL_PRODUCTS, "").equals("")) {
 
@@ -279,7 +238,7 @@ public class LoadingActivity extends AppCompatActivity {
                                 (CASE_ONLINE_SDK18, productsJson);
 
                         if (GlobalParameters.productsStorage == null) {
-                            fetchProductsJson(0, informationTextView);
+                            fetchProductsJson(CASE_OFFLINE);
                         }
                         callNextActivity();
                     }
@@ -293,23 +252,21 @@ public class LoadingActivity extends AppCompatActivity {
                                 (CASE_ONLINE_PLUS_SDK19, productsJson);
 
                         if (GlobalParameters.productsStorage == null) {
-                            fetchProductsJson(0, informationTextView);
+                            fetchProductsJson(CASE_OFFLINE);
                         }
                         callNextActivity();
                     }
                 }).execute(PRODUCTS_URL_SDK19_AND_ABOVE);
                 break;
             case CASE_SAME_VERSION:
-//                informationTextView.setText("SAMA VERSIOON");
-                String str = sharedPreferences.getString(ALL_PRODUCTS,
+                String allProductsAsJson = sharedPreferences.getString(ALL_PRODUCTS,
                         gson.toJson(new ProductsStorage()));
-                GlobalParameters.productsStorage = gson.fromJson(str.toString(),
+                GlobalParameters.productsStorage = gson.fromJson(allProductsAsJson,
                         ProductsStorage.class);
                 callNextActivity();
                 break;
         }
     }
-
 
     /**
      * Case 1 (CASE ONLINE_SDK18) -> Parser for Android phones with older SDK (<18)
@@ -368,11 +325,9 @@ public class LoadingActivity extends AppCompatActivity {
      * Stops all ongoing handlers and runnable threads.
      */
     private void callNextActivity() {
-        System.out.println("NEXT ACTIVITY CALl");
         Intent goToMainActivity = new Intent(LoadingActivity.this, MainActivity.class);
         goToMainActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(goToMainActivity);
-        introSlidesAutoSwitchHandler.removeCallbacks(introSlidesAutoRunnable);
         isActivityDestroyed = true;
         finish();
     }
@@ -387,7 +342,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[introViewPagerLayouts.length];
+        TextView[] dots = new TextView[introViewPagerLayouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -421,7 +376,6 @@ public class LoadingActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-
         }
 
         @Override
