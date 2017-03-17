@@ -16,8 +16,7 @@
             android:layout_width="140dp"
             android:layout_height="140dp"
             android:scaleType="fitCenter"
-            android:layout_centerInParent="true"
-            android:src="@drawable/intro_slide_1_image" />
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 

@@ -29,7 +29,6 @@
         android:layout_height="190dp"
         android:id="@+id/imageView6"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/intro_slide_2_image"
         android:layout_marginTop="20dp" />
 
     <com.nutikorv.andreas.nutikorvalpha.CustomViews.IntroSlidesTextView
